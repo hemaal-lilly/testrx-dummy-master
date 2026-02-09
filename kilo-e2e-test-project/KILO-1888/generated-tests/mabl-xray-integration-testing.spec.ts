@@ -1,8 +1,8 @@
 /**
  * Auto-generated Playwright test
  * Test: Mabl-Xray integration testing.
- * Project: proj_8bc51585
- * Generated: 2026-02-09T10:05:55.358Z
+ * Project: proj_9cca8fc3
+ * Generated: 2026-02-09T10:14:30.325Z
  * 
  * @generated
  */
