@@ -5,16 +5,16 @@ import { PlaywrightHomePage } from '../pages/PlaywrightHomePage';
 
 let pageObject: PlaywrightHomePage;
 
-Given('I navigate to the Playwright homepage', async function (this: ICustomWorld) {
+Given('I am on the Playwright homepage', async function (this: ICustomWorld) {
   pageObject = new PlaywrightHomePage(this.page);
   await pageObject.navigate();
 });
 
-When('I verify the page title', async function (this: ICustomWorld) {
-  await pageObject.verifyTitle();
+When('I check the page title', async function (this: ICustomWorld) {
+  // The page title is retrieved but not asserted here; assertion happens in Then step.
 });
 
-Then('I should see the correct title displayed', async function (this: ICustomWorld) {
-  // Title verification is already handled in the `verifyTitle` method.
-  // No additional assertion is needed here.
+Then('I should see the correct page title', async function (this: ICustomWorld) {
+  const expectedTitle = 'Fast and reliable end-to-end testing for modern web apps | Playwright';
+  await pageObject.expectPageTitle(expectedTitle);
 });
