@@ -1,8 +1,8 @@
 /**
  * Auto-generated Playwright test
  * Test: Search functionality with filters
- * Project: proj_471641bd
- * Generated: 2026-02-18T12:13:30.082Z
+ * Project: proj_aa18f7ea
+ * Generated: 2026-02-18T12:40:03.268Z
  * 
  * @generated
  */
