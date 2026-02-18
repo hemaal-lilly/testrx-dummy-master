@@ -17,14 +17,13 @@ export class UserLoginPage {
     return this.page.locator('[data-testid="password"]');
   }
 
-  get submitButton(): Locator {
-    return this.page.locator('[data-testid="submit"]');
+  get loginButton(): Locator {
+    return this.page.locator('[data-testid="login-button"]');
   }
 
   // Actions
   /**
-   * Navigates to the Playwright homepage.
-   * @returns {Promise<void>}
+   * Navigate to the Playwright homepage
    */
   async navigate(): Promise<void> {
     await this.page.goto('https://playwright.dev/');
@@ -32,38 +31,34 @@ export class UserLoginPage {
   }
 
   /**
-   * Fills in the email field.
-   * @param {string} email - The email to input.
-   * @returns {Promise<void>}
+   * Fill in the email field
+   * @param email - The user's email address
    */
   async fillEmail(email: string): Promise<void> {
     await this.emailInput.fill(email);
   }
 
   /**
-   * Fills in the password field.
-   * @param {string} password - The password to input.
-   * @returns {Promise<void>}
+   * Fill in the password field
+   * @param password - The user's password
    */
   async fillPassword(password: string): Promise<void> {
     await this.passwordInput.fill(password);
   }
 
   /**
-   * Clicks the submit button.
-   * @returns {Promise<void>}
+   * Click the login button
    */
-  async submit(): Promise<void> {
-    await this.submitButton.click();
+  async clickLogin(): Promise<void> {
+    await this.loginButton.click();
     await this.page.waitForLoadState('networkidle');
   }
 
   // Assertions
   /**
-   * Asserts that the user is redirected to the success page.
-   * @returns {Promise<void>}
+   * Assert that the user is redirected to the dashboard page
    */
-  async expectSuccess(): Promise<void> {
-    await expect(this.page).toHaveURL(/success/);
+  async expectDashboardPage(): Promise<void> {
+    await expect(this.page).toHaveURL(/dashboard/);
   }
 }

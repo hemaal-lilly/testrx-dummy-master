@@ -11,12 +11,12 @@ Given('I am on the Playwright homepage', async function (this: ICustomWorld) {
   await loginPage.navigate();
 });
 
-When('I enter valid credentials and submit', async function (this: ICustomWorld) {
-  await loginPage.fillEmail('test@example.com');
-  await loginPage.fillPassword('securePassword123');
-  await loginPage.submit();
+When('I log in with valid credentials', async function (this: ICustomWorld) {
+  await loginPage.fillEmail('validuser@example.com');
+  await loginPage.fillPassword('securepassword123');
+  await loginPage.clickLogin();
 });
 
-Then('I should be redirected to the success page', async function (this: ICustomWorld) {
-  await loginPage.expectSuccess();
+Then('I should see the dashboard page', async function (this: ICustomWorld) {
+  await loginPage.expectDashboardPage();
 });

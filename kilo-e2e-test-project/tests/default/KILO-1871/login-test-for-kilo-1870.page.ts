@@ -16,15 +16,16 @@ export class PlaywrightLoginPage {
 
   // Actions
   /**
-   * Navigate to the Playwright homepage
+   * Navigate to the Playwright homepage.
    */
   async navigateToHomepage(): Promise<void> {
     await this.page.goto('https://playwright.dev/');
     await this.page.waitForLoadState('networkidle');
+    await expect(this.page).toHaveTitle('Fast and reliable end-to-end testing for modern web apps | Playwright');
   }
 
   /**
-   * Navigate to the login page
+   * Navigate to the login page.
    */
   async navigateToLoginPage(): Promise<void> {
     await this.loginButton.click();
@@ -32,26 +33,26 @@ export class PlaywrightLoginPage {
   }
 
   /**
-   * Fill in email and password fields
+   * Fill in login credentials.
    * @param email - User email
    * @param password - User password
    */
-  async fillCredentials(email: string, password: string): Promise<void> {
+  async fillLoginCredentials(email: string, password: string): Promise<void> {
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
   }
 
   /**
-   * Submit the login form
+   * Submit the login form.
    */
-  async submitLogin(): Promise<void> {
+  async submitLoginForm(): Promise<void> {
     await this.submitButton.click();
     await this.page.waitForLoadState('networkidle');
   }
 
   // Assertions
   /**
-   * Verify successful login by checking the URL
+   * Assert that the user is successfully logged in.
    */
   async expectSuccessfulLogin(): Promise<void> {
     await expect(this.page).toHaveURL(/dashboard/);
