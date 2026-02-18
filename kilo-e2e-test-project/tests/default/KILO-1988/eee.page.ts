@@ -18,7 +18,6 @@ export class PlaywrightHomePage {
 
   /**
    * Get the page title.
-   * @returns {Promise<string>} The page title.
    */
   async getPageTitle(): Promise<string> {
     return await this.page.title();
@@ -26,9 +25,9 @@ export class PlaywrightHomePage {
 
   /**
    * Assert that the page title matches the expected value.
-   * @param {string} expectedTitle - The expected page title.
+   * @param expectedTitle - The expected title of the page.
    */
-  async assertPageTitle(expectedTitle: string): Promise<void> {
+  async expectCorrectTitle(expectedTitle: string): Promise<void> {
     const actualTitle = await this.getPageTitle();
     await expect(actualTitle).toBe(expectedTitle);
   }
