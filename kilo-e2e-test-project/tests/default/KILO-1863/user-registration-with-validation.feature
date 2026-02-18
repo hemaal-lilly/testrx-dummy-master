@@ -1,8 +1,8 @@
 /**
  * Auto-generated Playwright test
  * Test: User registration with validation
- * Project: proj_471641bd
- * Generated: 2026-02-18T12:13:33.901Z
+ * Project: proj_172871d2
+ * Generated: 2026-02-18T13:24:40.841Z
  * 
  * @generated
  */
