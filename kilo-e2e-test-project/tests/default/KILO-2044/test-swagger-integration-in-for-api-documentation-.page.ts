@@ -1,5 +1,5 @@
 // Page Object: PlaywrightHomePage
-import { Page, expect } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 
 export class PlaywrightHomePage {
   readonly page: Page;
@@ -8,28 +8,37 @@ export class PlaywrightHomePage {
     this.page = page;
   }
 
+  // Locators
+  get apiDocsLink(): Locator {
+    return this.page.locator('a:has-text("API documentation")'); // Assuming "API documentation" is the link text
+  }
+
+  get swaggerIntegration(): Locator {
+    return this.page.locator('[data-testid="swagger-container"]'); // Example data-testid for swagger container
+  }
+
+  // Actions
   /**
-   * Navigate to the Playwright homepage
+   * Navigate to the Playwright homepage.
    */
-  async navigate(): Promise<void> {
+  async navigateToHome(): Promise<void> {
     await this.page.goto('https://playwright.dev/');
     await this.page.waitForLoadState('networkidle');
   }
 
   /**
-   * Get the page title
-   * @returns {Promise<string>} The page title
+   * Click on the API documentation link.
    */
-  async getPageTitle(): Promise<string> {
-    return this.page.title();
+  async navigateToApiDocs(): Promise<void> {
+    await this.apiDocsLink.click();
+    await this.page.waitForLoadState('networkidle');
   }
 
+  // Assertions
   /**
-   * Assert that the page title matches the expected value
-   * @param expectedTitle {string} The expected page title
+   * Verify that the swagger integration is loaded successfully.
    */
-  async assertPageTitle(expectedTitle: string): Promise<void> {
-    const actualTitle = await this.getPageTitle();
-    await expect(actualTitle).toBe(expectedTitle);
+  async verifySwaggerIntegration(): Promise<void> {
+    await expect(this.swaggerIntegration).toBeVisible({ timeout: 5000 });
   }
 }
