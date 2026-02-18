@@ -4,19 +4,17 @@ import { expect } from '@playwright/test';
 import { ICustomWorld } from '../support/world';
 import { PlaywrightHomePage } from '../pages/PlaywrightHomePage';
 
-let pageObject: PlaywrightHomePage;
+let playwrightHomePage: PlaywrightHomePage;
 
 Given('I am on the Playwright homepage', async function (this: ICustomWorld) {
-  pageObject = new PlaywrightHomePage(this.page);
-  await pageObject.navigate();
+  playwrightHomePage = new PlaywrightHomePage(this.page);
+  await playwrightHomePage.navigateToHome();
 });
 
-When('I verify the page title', async function (this: ICustomWorld) {
-  const pageTitle = await pageObject.getPageTitle();
-  this.pageTitle = pageTitle; // Store the title for later use in assertions
+When('I navigate to the API documentation section', async function (this: ICustomWorld) {
+  await playwrightHomePage.navigateToApiDocs();
 });
 
-Then('I should see the correct page title', async function (this: ICustomWorld) {
-  const expectedTitle = 'Fast and reliable end-to-end testing for modern web apps | Playwright';
-  await pageObject.assertPageTitle(expectedTitle);
+Then('I should see the swagger integration loaded successfully', async function (this: ICustomWorld) {
+  await playwrightHomePage.verifySwaggerIntegration();
 });
