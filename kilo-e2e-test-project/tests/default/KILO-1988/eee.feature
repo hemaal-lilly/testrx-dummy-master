@@ -1,18 +1,18 @@
 /**
  * Auto-generated Playwright test
  * Test: eee
- * Project: proj_471641bd
- * Generated: 2026-02-18T12:13:31.197Z
+ * Project: proj_172871d2
+ * Generated: 2026-02-18T12:59:42.823Z
  * 
  * @generated
  */
 
 import { test, expect } from '@playwright/test';
 
-@automated @medium
+@automated @regression
 Feature: eee
   As a user
-  I want to visit the Playwright homepage
+  I want to visit the Playwright website
   So that I can verify its title and functionality
 
   Scenario: Verify Playwright homepage
