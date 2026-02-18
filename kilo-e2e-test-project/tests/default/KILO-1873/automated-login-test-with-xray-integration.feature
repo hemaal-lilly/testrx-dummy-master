@@ -1,8 +1,8 @@
 /**
  * Auto-generated Playwright test
  * Test: Automated Login Test with Xray Integration
- * Project: proj_471641bd
- * Generated: 2026-02-18T12:13:33.829Z
+ * Project: proj_172871d2
+ * Generated: 2026-02-18T12:59:46.716Z
  * 
  * @generated
  */
