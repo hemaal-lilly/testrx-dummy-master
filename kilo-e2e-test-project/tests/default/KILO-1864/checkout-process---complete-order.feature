@@ -1,8 +1,8 @@
 /**
  * Auto-generated Playwright test
  * Test: Checkout process - Complete order
- * Project: proj_471641bd
- * Generated: 2026-02-18T12:13:36.401Z
+ * Project: proj_172871d2
+ * Generated: 2026-02-18T13:25:28.088Z
  * 
  * @generated
  */
