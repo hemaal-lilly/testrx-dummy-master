@@ -1,21 +1,21 @@
 /**
  * Auto-generated Playwright test
  * Test: Test swagger integration in for API documentation in TestRx Automator
- * Project: proj_471641bd
- * Generated: 2026-02-18T12:13:32.665Z
+ * Project: proj_95bb03a1
+ * Generated: 2026-02-19T04:17:09.637Z
  * 
  * @generated
  */
 
 import { test, expect } from '@playwright/test';
 
-@automated @medium
+@automated @regression
 Feature: Test swagger integration in for API documentation in TestRx Automator
   As a user
-  I want to verify the swagger integration for API documentation
+  I want to verify swagger integration for API documentation
   So that I can ensure the API documentation is accessible and functional
 
-  Scenario: Test swagger integration in for API documentation in TestRx Automator
-    Given I am on the Playwright homepage
-    When I verify the page title
-    Then I should see the correct page title
+  Scenario: Verify swagger integration for API documentation
+    Given I navigate to the Playwright homepage
+    When I check the page title
+    Then I should see the correct title displayed
