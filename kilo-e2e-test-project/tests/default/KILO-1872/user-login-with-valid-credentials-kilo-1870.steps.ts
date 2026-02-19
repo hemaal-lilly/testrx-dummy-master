@@ -2,21 +2,21 @@
 import { Given, When, Then } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import { ICustomWorld } from '../support/world';
-import { UserLoginPage } from '../pages/UserLoginPage';
+import { UserLoginWithValidCredentialskilo1870Page } from '../pages/UserLoginWithValidCredentialskilo1870Page';
 
-let loginPage: UserLoginPage;
+let pageObject: UserLoginWithValidCredentialskilo1870Page;
 
 Given('I am on the Playwright homepage', async function (this: ICustomWorld) {
-  loginPage = new UserLoginPage(this.page);
-  await loginPage.navigate();
+  pageObject = new UserLoginWithValidCredentialskilo1870Page(this.page);
+  await pageObject.navigate();
 });
 
-When('I enter valid credentials and submit', async function (this: ICustomWorld) {
-  await loginPage.fillEmail('test@example.com');
-  await loginPage.fillPassword('securePassword123');
-  await loginPage.submit();
+When('I enter valid credentials and submit the login form', async function (this: ICustomWorld) {
+  await pageObject.fillEmail('test@example.com');
+  await pageObject.fillPassword('securePassword123');
+  await pageObject.submit();
 });
 
 Then('I should be redirected to the success page', async function (this: ICustomWorld) {
-  await loginPage.expectSuccess();
+  await pageObject.expectSuccess();
 });
