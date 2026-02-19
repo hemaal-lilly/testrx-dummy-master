@@ -1,15 +1,15 @@
 /**
  * Auto-generated Playwright test
  * Test: Login test for KILO-1870
- * Project: proj_471641bd
- * Generated: 2026-02-18T12:13:40.182Z
+ * Project: proj_96009214
+ * Generated: 2026-02-19T04:33:47.947Z
  * 
  * @generated
  */
 
 import { test, expect } from '@playwright/test';
 
-@automated @medium
+@automated @regression
 Feature: Login test for KILO-1870
   As a user
   I want to log in to the Playwright website
