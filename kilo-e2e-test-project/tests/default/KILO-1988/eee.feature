@@ -1,21 +1,21 @@
 /**
  * Auto-generated Playwright test
  * Test: eee
- * Project: proj_471641bd
- * Generated: 2026-02-18T12:13:31.197Z
+ * Project: proj_6ea48087
+ * Generated: 2026-02-19T07:47:33.912Z
  * 
  * @generated
  */
 
 import { test, expect } from '@playwright/test';
 
-@automated @medium
+@automated @regression
 Feature: eee
   As a user
   I want to visit the Playwright homepage
-  So that I can verify its title and functionality
+  So that I can verify the page loads successfully
 
-  Scenario: Verify Playwright homepage
-    Given I am on the Playwright homepage
-    When I check the page title
-    Then I should see the correct title
+  Scenario: Verify Playwright homepage loads correctly
+    Given I navigate to the Playwright homepage
+    When I wait for the page to load
+    Then I should see the correct page title
