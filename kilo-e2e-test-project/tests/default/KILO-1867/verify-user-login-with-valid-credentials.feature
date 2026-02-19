@@ -1,21 +1,21 @@
 /**
  * Auto-generated Playwright test
  * Test: Verify user login with valid credentials
- * Project: proj_471641bd
- * Generated: 2026-02-18T12:13:40.136Z
+ * Project: proj_96009214
+ * Generated: 2026-02-19T04:33:49.186Z
  * 
  * @generated
  */
 
 import { test, expect } from '@playwright/test';
 
-@automated @high_priority
+@automated @regression
 Feature: Verify user login with valid credentials
   As a user
-  I want to log in with valid credentials
-  So that I can access my account securely
+  I want to log in using valid credentials
+  So that I can access my account
 
   Scenario: Verify user login with valid credentials
     Given I am on the login page
     When I enter valid credentials and submit
-    Then I should be redirected to the dashboard
+    Then I should be logged in successfully
