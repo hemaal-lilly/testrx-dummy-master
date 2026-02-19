@@ -1,19 +1,19 @@
 /**
  * Auto-generated Playwright test
  * Test: Verify user login with valid credentials
- * Project: proj_471641bd
- * Generated: 2026-02-18T12:13:38.899Z
+ * Project: proj_172871d2
+ * Generated: 2026-02-19T03:23:51.153Z
  * 
  * @generated
  */
 
 import { test, expect } from '@playwright/test';
 
-@automated @high_priority
+@automated @regression
 Feature: Verify user login with valid credentials
   As a user
   I want to log in with valid credentials
-  So that I can access my account securely
+  So that I can access my account
 
   Scenario: Verify user login with valid credentials
     Given I am on the login page

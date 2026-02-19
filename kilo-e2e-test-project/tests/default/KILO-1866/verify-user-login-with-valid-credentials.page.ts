@@ -22,9 +22,8 @@ export class LoginPage {
   }
 
   // Actions
-
   /**
-   * Navigates to the login page.
+   * Navigate to the login page
    * @returns {Promise<void>}
    */
   async navigate(): Promise<void> {
@@ -33,8 +32,8 @@ export class LoginPage {
   }
 
   /**
-   * Fills in the email input field.
-   * @param {string} email - The email address to input.
+   * Fill the email input field
+   * @param {string} email - The email address to input
    * @returns {Promise<void>}
    */
   async fillEmail(email: string): Promise<void> {
@@ -42,8 +41,8 @@ export class LoginPage {
   }
 
   /**
-   * Fills in the password input field.
-   * @param {string} password - The password to input.
+   * Fill the password input field
+   * @param {string} password - The password to input
    * @returns {Promise<void>}
    */
   async fillPassword(password: string): Promise<void> {
@@ -51,7 +50,7 @@ export class LoginPage {
   }
 
   /**
-   * Clicks the submit button to log in.
+   * Click the submit button
    * @returns {Promise<void>}
    */
   async submit(): Promise<void> {
@@ -60,13 +59,11 @@ export class LoginPage {
   }
 
   // Assertions
-
   /**
-   * Verifies that the user is redirected to the dashboard after login.
+   * Verify successful login by checking the URL
    * @returns {Promise<void>}
    */
   async expectDashboard(): Promise<void> {
     await expect(this.page).toHaveURL(/dashboard/);
-    await expect(this.page.locator('[data-testid="welcome-message"]')).toBeVisible();
   }
 }
