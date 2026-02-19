@@ -1,7 +1,7 @@
-// Page Object: AutomatedLoginTestWithXrayIntegrationPage
+// Page Object: PlaywrightHomePage
 import { Page, Locator, expect } from '@playwright/test';
 
-export class AutomatedLoginTestWithXrayIntegrationPage {
+export class PlaywrightHomePage {
   readonly page: Page;
 
   constructor(page: Page) {
@@ -9,51 +9,50 @@ export class AutomatedLoginTestWithXrayIntegrationPage {
   }
 
   // Locators (getter-based for lazy evaluation)
-  get loginButton() { return this.page.locator('[data-testid="login-button"]'); }
-  get emailInput() { return this.page.locator('[data-testid="email-input"]'); }
-  get passwordInput() { return this.page.locator('[data-testid="password-input"]'); }
-  get submitButton() { return this.page.locator('[data-testid="submit-button"]'); }
+  get loginButton(): Locator {
+    return this.page.locator('[data-testid="login-button"]'); // Replace with actual data-testid
+  }
+
+  get emailInput(): Locator {
+    return this.page.locator('[data-testid="email-input"]'); // Replace with actual data-testid
+  }
+
+  get passwordInput(): Locator {
+    return this.page.locator('[data-testid="password-input"]'); // Replace with actual data-testid
+  }
 
   // Actions
   /**
-   * Navigate to the Playwright homepage
+   * Navigates to the Playwright homepage and waits for the page to load.
    */
-  async navigateToHome(): Promise<void> {
+  async navigate(): Promise<void> {
     await this.page.goto('https://playwright.dev/');
     await this.page.waitForLoadState('networkidle');
   }
 
   /**
-   * Navigate to the login page
+   * Fills in the email and password fields.
+   * @param email - The email address to input.
+   * @param password - The password to input.
    */
-  async navigateToLoginPage(): Promise<void> {
-    await this.loginButton.click();
-    await this.page.waitForLoadState('networkidle');
-  }
-
-  /**
-   * Fill in login credentials
-   * @param email - User's email address
-   * @param password - User's password
-   */
-  async fillLoginCredentials(email: string, password: string): Promise<void> {
+  async fillLoginForm(email: string, password: string): Promise<void> {
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
   }
 
   /**
-   * Submit the login form
+   * Clicks the login button and waits for the page to load.
    */
   async submitLogin(): Promise<void> {
-    await this.submitButton.click();
+    await this.loginButton.click();
     await this.page.waitForLoadState('networkidle');
   }
 
   // Assertions
   /**
-   * Assert successful login by checking the URL
+   * Verifies that the login was successful by checking the URL.
    */
-  async expectSuccessfulLogin(): Promise<void> {
-    await expect(this.page).toHaveURL(/dashboard/);
+  async expectLoginSuccess(): Promise<void> {
+    await expect(this.page).toHaveURL(/dashboard/); // Replace with actual success URL pattern
   }
 }
