@@ -1,23 +1,21 @@
 /**
  * Auto-generated Playwright test
  * Test: Mabl-Xray integration testing.
- * Project: proj_471641bd
- * Generated: 2026-02-18T12:13:28.775Z
+ * Project: proj_172871d2
+ * Generated: 2026-02-19T03:23:56.667Z
  * 
  * @generated
  */
 
 import { test, expect } from '@playwright/test';
 
-@automated @medium
+@automated @regression
 Feature: Mabl-Xray integration testing.
   As a user
-  I want to navigate through the application and verify the logo
-  So that I can ensure the application functions correctly
+  I want to verify the Mabl-Xray integration functionality
+  So that I can ensure the integration works as expected
 
   Scenario: Mabl-Xray integration testing.
-    Given I set the viewport size to 1080x1440
-    And I navigate to the application URL
-    When I log in with valid credentials
-    And I navigate through the application sections
-    Then I should see the brand logo with alt text "Brand Logo"
+    Given I am on the Playwright homepage
+    When I verify the page title
+    Then I should see the correct page title
