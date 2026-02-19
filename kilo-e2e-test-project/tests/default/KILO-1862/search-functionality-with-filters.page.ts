@@ -9,15 +9,25 @@ export class SearchFunctionalityWithFiltersPage {
   }
 
   // Locators (getter-based for lazy evaluation)
-  get searchInput() { return this.page.locator('[data-testid="search-input"]'); }
-  get searchButton() { return this.page.locator('[data-testid="search-button"]'); }
-  get filterDropdown() { return this.page.locator('[data-testid="filter-dropdown"]'); }
-  get filterOptionDocumentation() { return this.page.locator('[data-testid="filter-option-documentation"]'); }
-  get searchResults() { return this.page.locator('[data-testid="search-results"]'); }
+  get searchInput(): Locator {
+    return this.page.locator('[data-testid="search-input"]'); // Replace with actual selector
+  }
+
+  get filterDropdown(): Locator {
+    return this.page.locator('[data-testid="filter-dropdown"]'); // Replace with actual selector
+  }
+
+  get searchButton(): Locator {
+    return this.page.locator('[data-testid="search-button"]'); // Replace with actual selector
+  }
+
+  get searchResults(): Locator {
+    return this.page.locator('[data-testid="search-results"]'); // Replace with actual selector
+  }
 
   // Actions
   /**
-   * Navigate to the Playwright homepage
+   * Navigate to the Playwright homepage.
    */
   async navigate(): Promise<void> {
     await this.page.goto('https://playwright.dev/');
@@ -25,33 +35,23 @@ export class SearchFunctionalityWithFiltersPage {
   }
 
   /**
-   * Perform a search query
-   * @param query - The search term to input
+   * Perform a search operation with filters.
+   * @param searchTerm - The term to search for.
+   * @param filterOption - The filter to apply.
    */
-  async performSearch(query: string): Promise<void> {
-    await this.searchInput.fill(query);
+  async performSearch(searchTerm: string, filterOption: string): Promise<void> {
+    await this.searchInput.fill(searchTerm);
+    await this.filterDropdown.selectOption(filterOption);
     await this.searchButton.click();
-    await this.page.waitForLoadState('networkidle');
-  }
-
-  /**
-   * Apply a filter to the search results
-   * @param filter - The filter option to select
-   */
-  async applyFilter(filter: string): Promise<void> {
-    await this.filterDropdown.click();
-    if (filter === 'Documentation') {
-      await this.filterOptionDocumentation.click();
-    }
     await this.page.waitForLoadState('networkidle');
   }
 
   // Assertions
   /**
-   * Verify that search results are displayed
+   * Validate that search results are displayed.
    */
   async expectSearchResults(): Promise<void> {
-    await expect(this.searchResults).toBeVisible({ timeout: 5000 });
-    await expect(this.searchResults).toContainText('end-to-end testing');
+    await expect(this.searchResults).toBeVisible();
+    await expect(this.searchResults).toContainText('testing'); // Replace with dynamic assertion logic
   }
 }

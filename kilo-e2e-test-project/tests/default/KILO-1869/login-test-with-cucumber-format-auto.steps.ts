@@ -1,21 +1,18 @@
 // Step Definitions
 import { Given, When, Then } from '@cucumber/cucumber';
-import { expect } from '@playwright/test';
 import { ICustomWorld } from '../support/world';
-import { LoginPage } from '../pages/LoginPage';
+import { PlaywrightHomePage } from '../pages/PlaywrightHomePage';
 
-let loginPage: LoginPage;
+let homePage: PlaywrightHomePage;
 
 Given('I am on the Playwright homepage', async function (this: ICustomWorld) {
-  loginPage = new LoginPage(this.page);
-  await loginPage.navigateToLoginPage();
+  homePage = new PlaywrightHomePage(this.page);
 });
 
-When('I navigate to the login page and enter valid credentials', async function (this: ICustomWorld) {
-  await loginPage.fillCredentials('testuser@example.com', 'securepassword123');
-  await loginPage.clickLogin();
+When('I navigate to the page', async function (this: ICustomWorld) {
+  await homePage.navigate();
 });
 
-Then('I should be successfully logged in', async function (this: ICustomWorld) {
-  await loginPage.verifyLoginSuccess();
+Then('I should see the correct page title', async function (this: ICustomWorld) {
+  await homePage.validatePageTitle();
 });

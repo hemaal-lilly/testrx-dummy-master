@@ -16,7 +16,7 @@ export class PlaywrightLoginPage {
 
   // Actions
   /**
-   * Navigate to the Playwright homepage
+   * Navigate to the Playwright homepage.
    */
   async navigateToHomepage(): Promise<void> {
     await this.page.goto('https://playwright.dev/');
@@ -24,7 +24,7 @@ export class PlaywrightLoginPage {
   }
 
   /**
-   * Navigate to the login page
+   * Navigate to the login page.
    */
   async navigateToLoginPage(): Promise<void> {
     await this.loginButton.click();
@@ -32,17 +32,17 @@ export class PlaywrightLoginPage {
   }
 
   /**
-   * Fill in email and password fields
-   * @param email - User email
-   * @param password - User password
+   * Fill in login credentials.
+   * @param email - The email address to use.
+   * @param password - The password to use.
    */
-  async fillCredentials(email: string, password: string): Promise<void> {
+  async fillLoginCredentials(email: string, password: string): Promise<void> {
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
   }
 
   /**
-   * Submit the login form
+   * Submit the login form.
    */
   async submitLogin(): Promise<void> {
     await this.submitButton.click();
@@ -51,7 +51,7 @@ export class PlaywrightLoginPage {
 
   // Assertions
   /**
-   * Verify successful login by checking the URL
+   * Assert that the user is successfully logged in.
    */
   async expectSuccessfulLogin(): Promise<void> {
     await expect(this.page).toHaveURL(/dashboard/);

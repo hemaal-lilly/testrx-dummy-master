@@ -1,19 +1,17 @@
 // Step Definitions
 import { Given, When, Then } from '@cucumber/cucumber';
-import { expect } from '@playwright/test';
+import { CheckoutProcessPage } from '../pages/CheckoutProcessPage';
 import { ICustomWorld } from '../support/world';
-import { CheckoutPage } from '../pages/CheckoutPage';
 
-let checkoutPage: CheckoutPage;
+let checkoutPage: CheckoutProcessPage;
 
-Given('I am on the checkout page', async function (this: ICustomWorld) {
-  checkoutPage = new CheckoutPage(this.page);
-  await checkoutPage.navigate();
+Given('I am on the Playwright homepage', async function (this: ICustomWorld) {
+  checkoutPage = new CheckoutProcessPage(this.page);
+  await checkoutPage.navigateToHomepage();
 });
 
-When('I fill in the required details and submit the order', async function (this: ICustomWorld) {
-  await checkoutPage.fillCheckoutDetails('John Doe', '123 Main St', 'credit-card');
-  await checkoutPage.submitOrder();
+When('I navigate to the checkout page and complete the order', async function (this: ICustomWorld) {
+  await checkoutPage.completeOrder();
 });
 
 Then('I should see the order confirmation page', async function (this: ICustomWorld) {

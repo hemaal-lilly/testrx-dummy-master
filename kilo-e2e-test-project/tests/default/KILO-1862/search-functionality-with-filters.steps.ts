@@ -1,7 +1,8 @@
 // Step Definitions
 import { Given, When, Then } from '@cucumber/cucumber';
-import { SearchFunctionalityWithFiltersPage } from '../pages/SearchFunctionalityWithFiltersPage';
+import { expect } from '@playwright/test';
 import { ICustomWorld } from '../support/world';
+import { SearchFunctionalityWithFiltersPage } from '../pages/SearchFunctionalityWithFiltersPage';
 
 let pageObject: SearchFunctionalityWithFiltersPage;
 
@@ -10,12 +11,9 @@ Given('I am on the Playwright homepage', async function (this: ICustomWorld) {
   await pageObject.navigate();
 });
 
-When('I search for {string}', async function (this: ICustomWorld, searchTerm: string) {
-  await pageObject.performSearch(searchTerm);
-});
-
-When('I apply the {string} filter', async function (this: ICustomWorld, filter: string) {
-  await pageObject.applyFilter(filter);
+When('I search for {string} using filters', async function (this: ICustomWorld, searchTerm: string) {
+  const filterOption = 'relevant'; // Replace with actual filter logic
+  await pageObject.performSearch(searchTerm, filterOption);
 });
 
 Then('I should see relevant search results', async function (this: ICustomWorld) {

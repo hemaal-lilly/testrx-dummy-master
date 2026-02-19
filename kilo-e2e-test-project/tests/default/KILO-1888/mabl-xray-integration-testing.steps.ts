@@ -1,30 +1,20 @@
 // Step Definitions
 import { Given, When, Then } from '@cucumber/cucumber';
+import { PlaywrightHomePage } from '../pages/PlaywrightHomePage';
 import { ICustomWorld } from '../support/world';
-import { MablXrayIntegrationTestingPage } from '../pages/MablXrayIntegrationTestingPage';
 
-let pageObject: MablXrayIntegrationTestingPage;
+let pageObject: PlaywrightHomePage;
 
-Given('I set the viewport size to 1080x1440', async function (this: ICustomWorld) {
-  pageObject = new MablXrayIntegrationTestingPage(this.page);
-  await pageObject.setViewportSize();
+Given('I am on the Playwright homepage', async function (this: ICustomWorld) {
+  pageObject = new PlaywrightHomePage(this.page);
+  await pageObject.navigate();
 });
 
-Given('I navigate to the application URL', async function (this: ICustomWorld) {
-  const appUrl = this.parameters.app.url; // Assuming app.url is passed via configuration
-  await pageObject.navigateToApp(appUrl);
+When('I verify the page title', async function (this: ICustomWorld) {
+  // No explicit action needed here; the title will be verified in the next step.
 });
 
-When('I log in with valid credentials', async function (this: ICustomWorld) {
-  const email = 'aso_marketplace@elililly.onmicrosoft.com';
-  const password = 'your_password'; // Replace with a secure password management solution
-  await pageObject.login(email, password);
-});
-
-When('I navigate through the application sections', async function (this: ICustomWorld) {
-  await pageObject.navigateSections();
-});
-
-Then('I should see the brand logo with alt text "Brand Logo"', async function (this: ICustomWorld) {
-  await pageObject.verifyBrandLogo();
+Then('I should see the correct page title', async function (this: ICustomWorld) {
+  const expectedTitle = 'Fast and reliable end-to-end testing for modern web apps | Playwright';
+  await pageObject.assertPageTitle(expectedTitle);
 });

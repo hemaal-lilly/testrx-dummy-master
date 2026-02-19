@@ -1,7 +1,7 @@
-// Page Object: UserLoginPage
+// Page Object: UserLoginWithValidCredentialskilo1870Page
 import { Page, Locator, expect } from '@playwright/test';
 
-export class UserLoginPage {
+export class UserLoginWithValidCredentialskilo1870Page {
   readonly page: Page;
 
   constructor(page: Page) {
@@ -24,7 +24,6 @@ export class UserLoginPage {
   // Actions
   /**
    * Navigates to the Playwright homepage.
-   * @returns {Promise<void>}
    */
   async navigate(): Promise<void> {
     await this.page.goto('https://playwright.dev/');
@@ -32,26 +31,23 @@ export class UserLoginPage {
   }
 
   /**
-   * Fills in the email field.
-   * @param {string} email - The email to input.
-   * @returns {Promise<void>}
+   * Fills in the email input field.
+   * @param email - The email address to input.
    */
   async fillEmail(email: string): Promise<void> {
     await this.emailInput.fill(email);
   }
 
   /**
-   * Fills in the password field.
-   * @param {string} password - The password to input.
-   * @returns {Promise<void>}
+   * Fills in the password input field.
+   * @param password - The password to input.
    */
   async fillPassword(password: string): Promise<void> {
     await this.passwordInput.fill(password);
   }
 
   /**
-   * Clicks the submit button.
-   * @returns {Promise<void>}
+   * Submits the login form.
    */
   async submit(): Promise<void> {
     await this.submitButton.click();
@@ -60,8 +56,7 @@ export class UserLoginPage {
 
   // Assertions
   /**
-   * Asserts that the user is redirected to the success page.
-   * @returns {Promise<void>}
+   * Verifies that the user is redirected to the success page.
    */
   async expectSuccess(): Promise<void> {
     await expect(this.page).toHaveURL(/success/);

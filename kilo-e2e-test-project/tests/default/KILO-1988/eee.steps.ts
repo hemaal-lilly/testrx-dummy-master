@@ -3,18 +3,17 @@ import { Given, When, Then } from '@cucumber/cucumber';
 import { ICustomWorld } from '../support/world';
 import { PlaywrightHomePage } from '../pages/PlaywrightHomePage';
 
-let pageObject: PlaywrightHomePage;
+let homePage: PlaywrightHomePage;
 
-Given('I am on the Playwright homepage', async function (this: ICustomWorld) {
-  pageObject = new PlaywrightHomePage(this.page);
-  await pageObject.navigate();
+Given('I navigate to the Playwright homepage', async function (this: ICustomWorld) {
+  homePage = new PlaywrightHomePage(this.page);
+  await homePage.navigate();
 });
 
-When('I check the page title', async function (this: ICustomWorld) {
-  // No specific action needed here; title will be checked in the next step.
+When('I wait for the page to load', async function (this: ICustomWorld) {
+  // Explicit wait is handled in the Page Object's navigate method
 });
 
-Then('I should see the correct title', async function (this: ICustomWorld) {
-  const expectedTitle = 'Fast and reliable end-to-end testing for modern web apps | Playwright';
-  await pageObject.assertPageTitle(expectedTitle);
+Then('I should see the correct page title', async function (this: ICustomWorld) {
+  await homePage.expectCorrectTitle();
 });
