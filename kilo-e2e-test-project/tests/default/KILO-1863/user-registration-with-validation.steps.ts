@@ -2,23 +2,23 @@
 import { Given, When, Then } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import { ICustomWorld } from '../support/world';
-import { UserRegistrationWithValidationPage } from '../pages/UserRegistrationWithValidationPage';
+import { UserRegistrationPage } from '../pages/UserRegistrationPage';
 
-let pageObject: UserRegistrationWithValidationPage;
+let registrationPage: UserRegistrationPage;
 
 Given('I am on the registration page', async function (this: ICustomWorld) {
-  pageObject = new UserRegistrationWithValidationPage(this.page);
-  await pageObject.navigate();
+  registrationPage = new UserRegistrationPage(this.page);
+  await registrationPage.navigate();
 });
 
-When('I fill in the registration form with valid data', async function (this: ICustomWorld) {
-  await pageObject.fillRegistrationForm('test@example.com', 'Password123!', 'Password123!');
+When('I fill in valid registration details', async function (this: ICustomWorld) {
+  await registrationPage.fillRegistrationForm('John Doe', 'john.doe@example.com', 'securePassword123');
 });
 
 When('I submit the registration form', async function (this: ICustomWorld) {
-  await pageObject.submitForm();
+  await registrationPage.submitForm();
 });
 
-Then('I should see a success message', async function (this: ICustomWorld) {
-  await pageObject.expectSuccessMessage();
+Then('I should see a confirmation message', async function (this: ICustomWorld) {
+  await registrationPage.expectConfirmationMessage();
 });

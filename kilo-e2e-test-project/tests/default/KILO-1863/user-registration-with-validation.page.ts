@@ -1,7 +1,7 @@
-// Page Object: UserRegistrationWithValidationPage
+// Page Object: UserRegistrationPage
 import { Page, Locator, expect } from '@playwright/test';
 
-export class UserRegistrationWithValidationPage {
+export class UserRegistrationPage {
   readonly page: Page;
 
   constructor(page: Page) {
@@ -9,6 +9,10 @@ export class UserRegistrationWithValidationPage {
   }
 
   // Locators (getter-based for lazy evaluation)
+  get nameInput(): Locator {
+    return this.page.locator('[data-testid="name-input"]');
+  }
+
   get emailInput(): Locator {
     return this.page.locator('[data-testid="email-input"]');
   }
@@ -17,21 +21,17 @@ export class UserRegistrationWithValidationPage {
     return this.page.locator('[data-testid="password-input"]');
   }
 
-  get confirmPasswordInput(): Locator {
-    return this.page.locator('[data-testid="confirm-password-input"]');
-  }
-
   get submitButton(): Locator {
     return this.page.locator('[data-testid="submit-button"]');
   }
 
-  get successMessage(): Locator {
-    return this.page.locator('[data-testid="success-message"]');
+  get confirmationMessage(): Locator {
+    return this.page.locator('[data-testid="confirmation-message"]');
   }
 
   // Actions
   /**
-   * Navigate to the registration page.
+   * Navigates to the registration page.
    */
   async navigate(): Promise<void> {
     await this.page.goto('/register');
@@ -39,19 +39,19 @@ export class UserRegistrationWithValidationPage {
   }
 
   /**
-   * Fill the registration form with provided data.
-   * @param email - User email
-   * @param password - User password
-   * @param confirmPassword - Confirmation of the password
+   * Fills in the registration form with user details.
+   * @param name - User's name
+   * @param email - User's email
+   * @param password - User's password
    */
-  async fillRegistrationForm(email: string, password: string, confirmPassword: string): Promise<void> {
+  async fillRegistrationForm(name: string, email: string, password: string): Promise<void> {
+    await this.nameInput.fill(name);
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
-    await this.confirmPasswordInput.fill(confirmPassword);
   }
 
   /**
-   * Submit the registration form.
+   * Submits the registration form.
    */
   async submitForm(): Promise<void> {
     await this.submitButton.click();
@@ -60,9 +60,10 @@ export class UserRegistrationWithValidationPage {
 
   // Assertions
   /**
-   * Assert that the success message is visible.
+   * Asserts that the confirmation message is visible.
    */
-  async expectSuccessMessage(): Promise<void> {
-    await expect(this.successMessage).toBeVisible({ timeout: 5000 });
+  async expectConfirmationMessage(): Promise<void> {
+    await expect(this.confirmationMessage).toBeVisible();
+    await expect(this.confirmationMessage).toHaveText('Registration successful!');
   }
 }
