@@ -9,7 +9,7 @@ export class PlaywrightHomePage {
   }
 
   /**
-   * Navigate to the Playwright homepage and wait for the page to load.
+   * Navigates to the Playwright homepage and waits for the page to load completely.
    */
   async navigate(): Promise<void> {
     await this.page.goto('https://playwright.dev/');
@@ -17,10 +17,17 @@ export class PlaywrightHomePage {
   }
 
   /**
-   * Verify the page title matches the expected title.
+   * Returns the current page title.
    */
-  async verifyTitle(): Promise<void> {
-    const expectedTitle = 'Fast and reliable end-to-end testing for modern web apps | Playwright';
-    await expect(this.page).toHaveTitle(expectedTitle);
+  async getPageTitle(): Promise<string> {
+    return await this.page.title();
+  }
+
+  /**
+   * Asserts that the page title matches the expected value.
+   */
+  async assertPageTitle(expectedTitle: string): Promise<void> {
+    const actualTitle = await this.getPageTitle();
+    await expect(actualTitle).toBe(expectedTitle);
   }
 }
