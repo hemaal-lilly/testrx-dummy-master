@@ -1,7 +1,7 @@
-// Page Object: CheckoutPage
+// Page Object: CheckoutProcessPage
 import { Page, Locator, expect } from '@playwright/test';
 
-export class CheckoutPage {
+export class CheckoutProcessPage {
   readonly page: Page;
 
   constructor(page: Page) {
@@ -9,52 +9,28 @@ export class CheckoutPage {
   }
 
   // Locators (getter-based for lazy evaluation)
-  get nameInput(): Locator {
-    return this.page.locator('[data-testid="name-input"]');
-  }
-
-  get addressInput(): Locator {
-    return this.page.locator('[data-testid="address-input"]');
-  }
-
-  get paymentMethodDropdown(): Locator {
-    return this.page.locator('[data-testid="payment-method-dropdown"]');
-  }
-
-  get submitOrderButton(): Locator {
-    return this.page.locator('[data-testid="submit-order-button"]');
+  get checkoutButton(): Locator {
+    return this.page.locator('[data-testid="checkout-button"]');
   }
 
   get orderConfirmationMessage(): Locator {
-    return this.page.locator('[data-testid="order-confirmation-message"]');
+    return this.page.locator('[data-testid="order-confirmation"]');
   }
 
   // Actions
   /**
-   * Navigate to the checkout page.
+   * Navigate to the Playwright homepage.
    */
-  async navigate(): Promise<void> {
-    await this.page.goto('/checkout');
+  async navigateToHomepage(): Promise<void> {
+    await this.page.goto('https://playwright.dev/');
     await this.page.waitForLoadState('networkidle');
   }
 
   /**
-   * Fill in the checkout form with user details.
-   * @param name - The name of the user.
-   * @param address - The address of the user.
-   * @param paymentMethod - The payment method to select.
+   * Click the checkout button to complete the order.
    */
-  async fillCheckoutDetails(name: string, address: string, paymentMethod: string): Promise<void> {
-    await this.nameInput.fill(name);
-    await this.addressInput.fill(address);
-    await this.paymentMethodDropdown.selectOption(paymentMethod);
-  }
-
-  /**
-   * Submit the order.
-   */
-  async submitOrder(): Promise<void> {
-    await this.submitOrderButton.click();
+  async completeOrder(): Promise<void> {
+    await this.checkoutButton.click();
     await this.page.waitForLoadState('networkidle');
   }
 
@@ -63,6 +39,6 @@ export class CheckoutPage {
    * Assert that the order confirmation message is visible.
    */
   async expectOrderConfirmation(): Promise<void> {
-    await expect(this.orderConfirmationMessage).toBeVisible({ timeout: 5000 });
+    await expect(this.orderConfirmationMessage).toBeVisible();
   }
 }
