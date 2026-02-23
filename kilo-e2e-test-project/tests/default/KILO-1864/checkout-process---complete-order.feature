@@ -1,8 +1,8 @@
 /**
  * Auto-generated Playwright test
  * Test: Checkout process - Complete order
- * Project: proj_471641bd
- * Generated: 2026-02-18T12:13:36.401Z
+ * Project: proj_6ea48087
+ * Generated: 2026-02-19T07:47:35.388Z
  * 
  * @generated
  */
@@ -16,6 +16,6 @@ Feature: Checkout process - Complete order
   So that I can place an order successfully
 
   Scenario: Checkout process - Complete order
-    Given I am on the checkout page
-    When I fill in the required details and submit the order
+    Given I am on the Playwright homepage
+    When I navigate to the checkout page and complete the order
     Then I should see the order confirmation page

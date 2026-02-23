@@ -1,21 +1,21 @@
 /**
  * Auto-generated Playwright test
  * Test: Automated Login Test with Xray Integration
- * Project: proj_471641bd
- * Generated: 2026-02-18T12:13:33.829Z
+ * Project: proj_6ea48087
+ * Generated: 2026-02-19T07:47:35.053Z
  * 
  * @generated
  */
 
 import { test, expect } from '@playwright/test';
 
-@automated @high_priority
+@automated @high
 Feature: Automated Login Test with Xray Integration
   As a user
-  I want to log in to the application
-  So that I can access my account securely
+  I want to test the login functionality
+  So that I can verify successful authentication
 
-  Scenario: Successful login
-    Given I am on the Playwright homepage
-    When I navigate to the login page and enter valid credentials
-    Then I should be successfully logged in
+  Scenario: Automated Login Test with Xray Integration
+    Given I navigate to the Playwright homepage
+    When I perform the login action
+    Then I should see the successful login result
