@@ -2,36 +2,41 @@
 import { Given, When, Then } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import { ICustomWorld } from '../support/world';
-import { LoginPage } from '../pages/LoginPage';
+import { MarketplaceLoginPage } from '../pages/MarketplaceLoginPage';
 
-let loginPage: LoginPage;
+let loginPage: MarketplaceLoginPage;
 
-Given('I navigate to the login page', async function (this: ICustomWorld) {
-  loginPage = new LoginPage(this.page);
-  await loginPage.navigate();
+Given('I am on the login page', async function (this: ICustomWorld) {
+  loginPage = new MarketplaceLoginPage(this.page);
+  await loginPage.navigateToLoginPage();
 });
 
 When('I enter valid username and password', async function (this: ICustomWorld) {
-  const validUsername = 'validUsernameFromExcel'; // Replace with actual data from Excel
-  const validPassword = 'validPasswordFromExcel'; // Replace with actual data from Excel
-  await loginPage.fillUsername(validUsername);
-  await loginPage.fillPassword(validPassword);
+  const username = 'validUsername'; // Replace with actual data from Excel sheet
+  const password = 'validPassword'; // Replace with actual data from Excel sheet
+  await loginPage.fillUsername(username);
+  await loginPage.fillPassword(password);
 });
 
-When('I leave one credential field empty', async function (this: ICustomWorld) {
-  const validPassword = 'validPasswordFromExcel'; // Replace with actual data from Excel
-  await loginPage.fillPassword(validPassword);
+When('I leave the username field empty', async function (this: ICustomWorld) {
+  const password = 'validPassword'; // Replace with actual data from Excel sheet
+  await loginPage.fillPassword(password);
 });
 
-When('I enter invalid username or password', async function (this: ICustomWorld) {
-  const invalidUsername = 'invalidUsername';
-  const invalidPassword = 'invalidPassword';
-  await loginPage.fillUsername(invalidUsername);
-  await loginPage.fillPassword(invalidPassword);
+When('I enter a valid password', async function (this: ICustomWorld) {
+  const password = 'validPassword'; // Replace with actual data from Excel sheet
+  await loginPage.fillPassword(password);
 });
 
-When('I click the login button', async function (this: ICustomWorld) {
-  await loginPage.clickLoginButton();
+When('I enter an invalid username or password', async function (this: ICustomWorld) {
+  const username = 'invalidUsername';
+  const password = 'invalidPassword';
+  await loginPage.fillUsername(username);
+  await loginPage.fillPassword(password);
+});
+
+When('I click the Login button', async function (this: ICustomWorld) {
+  await loginPage.clickLogin();
 });
 
 Then('I should see the top header navigation bar', async function (this: ICustomWorld) {

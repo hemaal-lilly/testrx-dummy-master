@@ -1,7 +1,7 @@
-// Page Object: LoginPage
+// Page Object: MarketplaceLoginPage
 import { Page, Locator, expect } from '@playwright/test';
 
-export class LoginPage {
+export class MarketplaceLoginPage {
   readonly page: Page;
 
   constructor(page: Page) {
@@ -21,19 +21,19 @@ export class LoginPage {
     return this.page.locator('[data-testid="login-button"]');
   }
 
-  get errorMessage(): Locator {
-    return this.page.locator('[data-testid="error-message"]');
-  }
-
   get headerNavigation(): Locator {
     return this.page.locator('[data-testid="header-navigation"]');
+  }
+
+  get errorMessage(): Locator {
+    return this.page.locator('[data-testid="error-message"]');
   }
 
   // Actions
   /**
    * Navigate to the login page
    */
-  async navigate(): Promise<void> {
+  async navigateToLoginPage(): Promise<void> {
     await this.page.goto('https://qa.automate.lilly.com');
     await this.page.waitForLoadState('networkidle');
   }
@@ -57,7 +57,7 @@ export class LoginPage {
   /**
    * Click the login button
    */
-  async clickLoginButton(): Promise<void> {
+  async clickLogin(): Promise<void> {
     await this.loginButton.click();
     await this.page.waitForLoadState('networkidle');
   }
@@ -71,7 +71,7 @@ export class LoginPage {
   }
 
   /**
-   * Assert that an error message is displayed
+   * Assert that an error message is visible
    */
   async assertErrorMessageVisible(): Promise<void> {
     await expect(this.errorMessage).toBeVisible();

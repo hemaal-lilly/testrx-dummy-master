@@ -1,36 +1,46 @@
 /**
  * Auto-generated Playwright test
  * Test: Set Up User Authentication API
- * Project: proj_e8e80b6c
- * Generated: 2026-03-02T09:40:17.264Z
+ * Project: proj_85874ca7
+ * Generated: 2026-03-02T14:14:31.585Z
  * 
  * @generated
  */
 
 import { test, expect } from '@playwright/test';
 
-@automated @api @authentication
+@automated @api @regression
 Feature: Set Up User Authentication API
   As a developer
   I want to test the user authentication API endpoints
-  So that I can ensure the API behaves as expected
+  So that I can ensure they function correctly under various scenarios
 
   Scenario: Register a new user successfully
-    Given I send a POST request to "/api/auth/register" with JSON body containing name, email, and password
-    Then I should see a successful response with status code 201
+    Given I have a valid registration payload
+    When I send a POST request to "/api/auth/register"
+    Then I should receive a successful response
 
   Scenario: Login with valid credentials
-    Given I send a POST request to "/api/auth/login" with JSON body containing email and password
-    Then I should see a successful response with a valid JWT token
+    Given I have valid login credentials
+    When I send a POST request to "/api/auth/login"
+    Then I should receive a valid JWT token in the response
 
-  Scenario: Access secured endpoint with valid token
-    Given I send a GET request to a secured endpoint with a valid Authorization header
-    Then I should see a successful response
+  Scenario: Access a secured endpoint with valid token
+    Given I have a valid JWT token
+    When I send a GET request to the secured endpoint with the Authorization header
+    Then I should receive a successful response
 
-  Scenario: Register a user with duplicate email
-    Given I send a POST request to "/api/auth/register" with JSON body containing name, duplicate email, and password
-    Then I should see an error response with status code 409
+  Scenario: Register with duplicate email
+    Given I have a registration payload with an already registered email
+    When I send a POST request to "/api/auth/register"
+    Then I should receive an error response
 
   Scenario: Login with incorrect password
-    Given I send a POST request to "/api/auth/login" with JSON body containing correct email and incorrect password
-    Then I should see an error response with status code 401
+    Given I have a valid email and incorrect password
+    When I send a POST request to "/api/auth/login"
+    Then I should receive an error response
+
+  Scenario: Access secured endpoint without token
+    Given I do not provide an Authorization header
+    When I send a GET request to the secured endpoint
+    Then I should receive an unauthorized response

@@ -1,64 +1,53 @@
 // Step Definitions
 import { Given, When, Then } from '@cucumber/cucumber';
-import { expect } from '@playwright/test';
 import { ICustomWorld } from '../support/world';
-import { WorkOrderPortalPage } from '../pages/WorkOrderPortalPage';
+import { WorkOrderSolutionPortalPage } from '../pages/WorkOrderSolutionPortalPage';
 
-let pageObject: WorkOrderPortalPage;
+let pageObject: WorkOrderSolutionPortalPage;
 
-Given('I trigger ingestion of the prepared VEM CSV with missing required fields', async function (this: ICustomWorld) {
+Given('I have triggered ingestion of a VEM CSV with missing required fields', async function (this: ICustomWorld) {
   // Simulate ingestion process (mock or API call)
-  console.log('Triggering ingestion of VEM CSV with missing required fields...');
+  console.log('Ingestion triggered for VEM CSV with missing required fields');
 });
 
-Given('I trigger ingestion of the VEM CSV with PAN missing', async function (this: ICustomWorld) {
+Given('I have triggered ingestion of a VEM CSV with missing PAN field', async function (this: ICustomWorld) {
   // Simulate ingestion process (mock or API call)
-  console.log('Triggering ingestion of VEM CSV with PAN missing...');
+  console.log('Ingestion triggered for VEM CSV with missing PAN field');
 });
 
-Given('I trigger ingestion of the VEM CSV with preparation time over 3 hours', async function (this: ICustomWorld) {
+Given('I have triggered ingestion of a VEM CSV with preparation time over 3 hours', async function (this: ICustomWorld) {
   // Simulate ingestion process (mock or API call)
-  console.log('Triggering ingestion of VEM CSV with preparation time over 3 hours...');
+  console.log('Ingestion triggered for VEM CSV with preparation time over 3 hours');
 });
 
 When('I open the Work Order Solution Portal', async function (this: ICustomWorld) {
-  pageObject = new WorkOrderPortalPage(this.page);
-  await pageObject.navigateToPortal();
+  pageObject = new WorkOrderSolutionPortalPage(this.page);
+  await pageObject.navigate();
 });
 
 When('I log into the Work Order Solution Portal as a CMS team user', async function (this: ICustomWorld) {
-  // Simulate login process (mock or API call)
-  console.log('Logging into the Work Order Solution Portal as a CMS team user...');
-  pageObject = new WorkOrderPortalPage(this.page);
-  await pageObject.navigateToPortal();
+  pageObject = new WorkOrderSolutionPortalPage(this.page);
+  await pageObject.navigate();
+  // Add login logic here if required
 });
 
 When('I open the Work Order associated with the meeting', async function (this: ICustomWorld) {
-  await pageObject.searchWorkOrder('meeting-work-order-id');
+  await pageObject.searchWorkOrder('meeting-id'); // Replace 'meeting-id' with actual ID
+  await pageObject.openWorkOrder();
 });
 
-When('I enter the PAN details in the appropriate field', async function (this: ICustomWorld) {
-  await pageObject.enterPanDetails('ABCDE1234F');
+When('I enter the PAN details and save', async function (this: ICustomWorld) {
+  await pageObject.enterPanDetails('ABCDE1234F'); // Replace with actual PAN
 });
 
-When('I save the PAN entry', async function (this: ICustomWorld) {
-  await pageObject.savePanDetails();
+When('I confirm the preparation time and approvals', async function (this: ICustomWorld) {
+  await pageObject.confirmPreparation();
 });
 
-When('I manually confirm required approvals and preparation time', async function (this: ICustomWorld) {
-  await pageObject.confirmApprovals();
+Then('I should see the Work Order corresponding to the meeting in the processed file', async function (this: ICustomWorld) {
+  await pageObject.expectWorkOrderVisible();
 });
 
-Then('I should see the Work Order corresponding to the processed file', async function (this: ICustomWorld) {
-  await pageObject.expectWorkOrderVisible('meeting-work-order-id');
-});
-
-Then('I should be able to initiate the next steps of Work Order generation', async function (this: ICustomWorld) {
-  // Add assertion for next steps initiation (mock or API call)
-  console.log('Initiating next steps of Work Order generation...');
-});
-
-Then('I should be able to proceed with Work Order creation', async function (this: ICustomWorld) {
-  // Add assertion for successful Work Order creation (mock or API call)
-  console.log('Proceeding with Work Order creation...');
+Then('I should be able to proceed with Work Order generation', async function (this: ICustomWorld) {
+  await pageObject.expectPanSaved();
 });

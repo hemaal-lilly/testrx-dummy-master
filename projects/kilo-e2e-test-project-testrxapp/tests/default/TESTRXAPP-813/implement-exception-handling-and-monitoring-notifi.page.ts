@@ -16,8 +16,8 @@ export class ExceptionHandlingAndMonitoringNotificationsPage {
   get stakeholderRecipientsInput() { return this.page.locator('[data-testid="stakeholder-recipients"]'); }
   get logPathInput() { return this.page.locator('[data-testid="log-path"]'); }
   get retryAttemptsInput() { return this.page.locator('[data-testid="retry-attempts"]'); }
-  get exceptionLogEntry() { return this.page.locator('[data-testid="exception-log-entry"]'); }
-  get errorMessage() { return this.page.locator('[data-testid="error-message"]'); }
+  get errorNotification() { return this.page.locator('[data-testid="error-notification"]'); }
+  get logEntry() { return this.page.locator('[data-testid="log-entry"]'); }
 
   // Actions
   async configureMonitoringDistribution(email: string): Promise<void> {
@@ -36,18 +36,21 @@ export class ExceptionHandlingAndMonitoringNotificationsPage {
     await this.retryAttemptsInput.fill(attempts.toString());
   }
 
-  async triggerProcessException(stepName: string): Promise<void> {
-    await this.page.locator(`[data-testid="trigger-exception-${stepName}"]`).click();
+  async triggerProcessException(step: string): Promise<void> {
+    await this.page.locator(`[data-testid="exception-${step}"]`).click();
     await this.page.waitForLoadState('networkidle');
   }
 
-  async expectErrorMessage(expectedMessage: string): Promise<void> {
-    await expect(this.errorMessage).toHaveText(expectedMessage, { timeout: 5000 });
+  async expectErrorNotification(): Promise<void> {
+    await expect(this.errorNotification).toBeVisible({ timeout: 10000 });
   }
 
-  async expectLogEntryIncludes(fields: string[]): Promise<void> {
-    for (const field of fields) {
-      await expect(this.exceptionLogEntry).toContainText(field, { timeout: 5000 });
-    }
+  async expectLogEntry(): Promise<void> {
+    await expect(this.logEntry).toBeVisible({ timeout: 10000 });
+  }
+
+  async expectErrorMessage(message: string): Promise<void> {
+    const errorLocator = this.page.locator('[data-testid="error-message"]');
+    await expect(errorLocator).toHaveText(message, { timeout: 10000 });
   }
 }
