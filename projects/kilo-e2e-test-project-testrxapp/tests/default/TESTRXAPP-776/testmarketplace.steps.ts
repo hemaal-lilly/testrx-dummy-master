@@ -11,7 +11,7 @@ Given('the marketplace page is loaded', async function (this: ICustomWorld) {
 });
 
 When('the page renders', async function () {
-  // No specific action required, page is already loaded
+  // No additional actions needed for this step.
 });
 
 Then('the hero section is visible', async function () {
@@ -19,7 +19,7 @@ Then('the hero section is visible', async function () {
 });
 
 When('the hero section is viewed', async function () {
-  // No specific action required, hero section is already loaded
+  // No additional actions needed for this step.
 });
 
 Then('the heading text equals {string}', async function (expectedText: string) {
@@ -39,7 +39,7 @@ Then('a hero image is displayed on the right side of the hero section', async fu
 });
 
 When('the user scrolls to the cards section', async function () {
-  await pageObject.cardsSectionTitle.scrollIntoViewIfNeeded();
+  await pageObject.scrollToCardsSection();
 });
 
 Then('the section title {string} is visible', async function (expectedText: string) {
@@ -47,11 +47,11 @@ Then('the section title {string} is visible', async function (expectedText: stri
 });
 
 When('the cards under the {string} section are viewed', async function () {
-  // No specific action required, cards section is already loaded
+  // No additional actions needed for this step.
 });
 
-Then('exactly {int} cards are visible', async function (expectedCount: number) {
-  await pageObject.expectCardCount(expectedCount);
+Then('exactly three cards are visible', async function () {
+  await pageObject.expectThreeCardsVisible();
 });
 
 Then('the card titles are {string}, {string}, and {string}', async function (title1: string, title2: string, title3: string) {
@@ -59,19 +59,19 @@ Then('the card titles are {string}, {string}, and {string}', async function (tit
 });
 
 When('each displayed card under the {string} section is inspected', async function () {
-  // No specific action required, cards are already loaded
+  // No additional actions needed for this step.
 });
 
 Then('each card shows an image', async function () {
-  await pageObject.expectCardElementsVisible();
+  await pageObject.expectCardsHaveContent();
 });
 
 Then('each card shows a title', async function () {
-  await pageObject.expectCardElementsVisible();
+  await pageObject.expectCardsHaveContent();
 });
 
 Then('each card shows supporting descriptive text', async function () {
-  await pageObject.expectCardElementsVisible();
+  await pageObject.expectCardsHaveContent();
 });
 
 Then('the "Get Started" button is not visible', async function () {
@@ -87,14 +87,20 @@ When('the page is hard reloaded bypassing cache', async function () {
 });
 
 When('the browser window is resized between common mobile and desktop widths', async function () {
-  await pageObject.resizeWindow(375, 667); // Mobile size
-  await pageObject.resizeWindow(1280, 720); // Desktop size
+  const sizes = [
+    { width: 375, height: 667 }, // Mobile
+    { width: 768, height: 1024 }, // Tablet
+    { width: 1920, height: 1080 } // Desktop
+  ];
+  for (const size of sizes) {
+    await pageObject.resizeWindow(size.width, size.height);
+  }
 });
 
 Then('the hero section remains visible', async function () {
   await pageObject.expectHeroSectionVisible();
 });
 
-Then('the {string} section remains visible', async function (sectionTitle: string) {
-  await pageObject.expectCardsSectionTitleVisible(sectionTitle);
+Then('the "Automation Tech for Tech" section remains visible', async function () {
+  await pageObject.expectCardsSectionTitleVisible('Automation Tech for Tech');
 });

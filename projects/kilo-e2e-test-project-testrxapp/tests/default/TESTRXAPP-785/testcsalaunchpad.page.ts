@@ -8,24 +8,27 @@ export class PlaywrightHomePage {
     this.page = page;
   }
 
-  // Locators
+  /**
+   * Locator for the "Node.js" button in the navigation bar.
+   */
   get nodeJsButton(): Locator {
-    return this.page.locator('a.navbar__link', { hasText: 'Node.js' });
+    return this.page.locator('a.navbar__link:has-text("Node.js")');
   }
 
-  // Actions
   /**
-   * Navigate to the Playwright homepage
+   * Navigate to the Playwright homepage.
+   * @returns {Promise<void>}
    */
-  async navigate(): Promise<void> {
+  async navigateToHomePage(): Promise<void> {
     await this.page.goto('https://playwright.dev/');
     await this.page.waitForLoadState('networkidle');
   }
 
   /**
-   * Check if the Node.js button is visible
+   * Verify that the "Node.js" button is visible on the page.
+   * @returns {Promise<void>}
    */
-  async isNodeJsButtonVisible(): Promise<void> {
+  async verifyNodeJsButtonVisible(): Promise<void> {
     await expect(this.nodeJsButton).toBeVisible({ timeout: 5000 });
   }
 }
