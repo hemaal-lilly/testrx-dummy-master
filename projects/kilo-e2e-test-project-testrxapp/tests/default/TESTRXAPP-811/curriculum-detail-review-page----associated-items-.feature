@@ -2,7 +2,7 @@
  * Auto-generated Playwright test
  * Test: Curriculum Detail Review page -- Associated Items grid -- Associate an Item dialog window and grid
  * Project: proj_e8e80b6c
- * Generated: 2026-03-02T09:40:17.443Z
+ * Generated: 2026-03-02T10:21:15.812Z
  * 
  * @generated
  */
