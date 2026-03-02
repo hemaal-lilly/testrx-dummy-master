@@ -1,10 +1,7 @@
-// Page Object: NitrosamineAutomationPage
+// Page Object: ProvisionServiceAccountPage
 import { Page, Locator, expect } from '@playwright/test';
 
-/**
- * Page Object for Nitrosamine Automation
- */
-export class NitrosamineAutomationPage {
+export class ProvisionServiceAccountPage {
   readonly page: Page;
 
   constructor(page: Page) {
@@ -17,18 +14,15 @@ export class NitrosamineAutomationPage {
   get bodyInput() { return this.page.locator('[data-testid="body-input"]'); }
   get sendButton() { return this.page.locator('[data-testid="send-button"]'); }
   get inboxRefreshButton() { return this.page.locator('[data-testid="refresh-inbox"]'); }
-  get receivedEmail() { return this.page.locator('[data-testid="email-item"]'); }
-  get replyButton() { return this.page.locator('[data-testid="reply-button"]'); }
+  get provisioningForm() { return this.page.locator('[data-testid="provisioning-form"]'); }
+  get submitProvisioningButton() { return this.page.locator('[data-testid="submit-provisioning"]'); }
 
   // Actions
-  async navigateToEmailClient(): Promise<void> {
-    await this.page.goto('/email-client');
-    await this.page.waitForLoadState('networkidle');
-  }
-
   async signIn(email: string): Promise<void> {
-    await this.page.locator('[data-testid="email-signin"]').fill(email);
-    await this.page.locator('[data-testid="signin-button"]').click();
+    await this.page.goto('/login');
+    await this.page.fill('[data-testid="username"]', email);
+    await this.page.fill('[data-testid="password"]', 'password'); // Replace with secure handling
+    await this.page.click('[data-testid="login-button"]');
     await this.page.waitForLoadState('networkidle');
   }
 
@@ -36,9 +30,6 @@ export class NitrosamineAutomationPage {
     await this.emailInput.fill(recipient);
     await this.subjectInput.fill(subject);
     await this.bodyInput.fill(body);
-  }
-
-  async sendEmail(): Promise<void> {
     await this.sendButton.click();
     await this.page.waitForLoadState('networkidle');
   }
@@ -48,20 +39,27 @@ export class NitrosamineAutomationPage {
     await this.page.waitForLoadState('networkidle');
   }
 
-  async openReceivedEmail(): Promise<void> {
-    await this.receivedEmail.click();
-    await this.page.waitForLoadState('networkidle');
-  }
-
-  async replyToEmail(replyContent: string): Promise<void> {
-    await this.page.locator('[data-testid="reply-input"]').fill(replyContent);
-    await this.replyButton.click();
+  async submitProvisioningRequest(fields: Record<string, string | string[]>): Promise<void> {
+    for (const [key, value] of Object.entries(fields)) {
+      const fieldLocator = this.provisioningForm.locator(`[data-testid="${key}"]`);
+      if (Array.isArray(value)) {
+        await fieldLocator.fill(value.join(', '));
+      } else {
+        await fieldLocator.fill(value);
+      }
+    }
+    await this.submitProvisioningButton.click();
     await this.page.waitForLoadState('networkidle');
   }
 
   // Assertions
-  async verifyEmailContent(expectedContent: string): Promise<void> {
-    const emailContent = await this.page.locator('[data-testid="email-content"]').textContent();
-    expect(emailContent).toContain(expectedContent);
+  async expectEmailInInbox(subject: string): Promise<void> {
+    const emailLocator = this.page.locator(`[data-testid="email-subject-${subject}"]`);
+    await expect(emailLocator).toBeVisible();
+  }
+
+  async expectProvisioningSuccess(): Promise<void> {
+    const successMessage = this.page.locator('[data-testid="provisioning-success"]');
+    await expect(successMessage).toBeVisible();
   }
 }
