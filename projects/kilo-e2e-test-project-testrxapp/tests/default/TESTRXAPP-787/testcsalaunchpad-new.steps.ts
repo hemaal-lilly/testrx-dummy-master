@@ -7,75 +7,72 @@ let pageObject: TestCsaLaunchpadNewPage;
 
 Given('the user navigates to https://qa.csalaunchpad.lilly.com', async function (this: ICustomWorld) {
   pageObject = new TestCsaLaunchpadNewPage(this.page);
-  await pageObject.navigateToHomePage();
+  await pageObject.navigate();
 });
 
 Given('the user is on the home page', async function (this: ICustomWorld) {
-  await pageObject.navigateToHomePage();
+  // Assuming the navigation step already ensures the user is on the home page
+  await pageObject.assertVisible(pageObject.homeTab);
 });
 
 When('the user views the top header', async function (this: ICustomWorld) {
-  // No specific action required for viewing the header
+  // No specific action required for viewing
 });
 
 Then('"Home" is visible in the top header', async function (this: ICustomWorld) {
-  await pageObject.expectHeaderItemsVisible();
+  await pageObject.assertVisible(pageObject.homeTab);
 });
 
 Then('"Automation Platform" dropdown is visible in the top header', async function (this: ICustomWorld) {
-  await pageObject.expectHeaderItemsVisible();
+  await pageObject.assertVisible(pageObject.automationPlatformDropdown);
 });
 
 Then('"Marketplace" is visible in the top header', async function (this: ICustomWorld) {
-  await pageObject.expectHeaderItemsVisible();
+  await pageObject.assertVisible(pageObject.marketplaceLink);
 });
 
 Then('"TechZone" is visible in the top header', async function (this: ICustomWorld) {
-  await pageObject.expectHeaderItemsVisible();
+  await pageObject.assertVisible(pageObject.techZoneLink);
 });
 
 Then('"Admin Console" is visible in the top header', async function (this: ICustomWorld) {
-  await pageObject.expectHeaderItemsVisible();
+  await pageObject.assertVisible(pageObject.adminConsoleLink);
 });
 
 Then('the "Submit an Idea" button is visible', async function (this: ICustomWorld) {
-  await pageObject.expectSubmitIdeaButtonVisible();
+  await pageObject.assertVisible(pageObject.submitIdeaButton);
 });
 
 When('the home page is loaded', async function (this: ICustomWorld) {
-  // No specific action required for loading the page
+  // No specific action required for loading
 });
 
 Then('the "Home" tab is highlighted as active/selected', async function (this: ICustomWorld) {
-  await pageObject.expectHomeTabActive();
-});
-
-Then('the "Home" tab is not highlighted as active/selected', async function (this: ICustomWorld) {
-  await pageObject.expectHomeTabNotActive();
+  await pageObject.assertHomeTabActive();
 });
 
 Then('"My LQS302 Risk Evaluations (LEval)" card is visible', async function (this: ICustomWorld) {
-  await pageObject.expectCardsVisible();
+  await pageObject.assertVisible(pageObject.lqs302Card);
 });
 
 Then('the "My LQS302 Risk Evaluations (LEval)" card shows a relevant icon', async function (this: ICustomWorld) {
-  await pageObject.expectCardsVisible();
+  await pageObject.assertVisible(pageObject.lqs302CardIcon);
 });
 
 Then('the "My LQS302 Risk Evaluations (LEval)" card shows a right-arrow navigation indicator', async function (this: ICustomWorld) {
-  await pageObject.expectCardsVisible();
+  await pageObject.assertVisible(pageObject.lqs302CardArrow);
 });
 
 Then('"My IT Assets" card is visible', async function (this: ICustomWorld) {
-  await pageObject.expectCardsVisible();
+  await pageObject.assertVisible(pageObject.itAssetsCard);
 });
 
 Then('the "My IT Assets" card shows a relevant icon', async function (this: ICustomWorld) {
-  await pageObject.expectCardsVisible();
+  await pageObject.assertVisible(pageObject.itAssetsCardIcon);
 });
 
 Then('the "My IT Assets" card shows a right-arrow navigation indicator', async function (this: ICustomWorld) {
-  await pageObject.expectCardsVisible();
+  await pageObject.assertVisible(pageObject.itAssetsCardArrow);
 });
 
 When('the user clicks the "My LQS302 Risk Evaluations (LEval)" card', async function (this: ICustomWorld) {
@@ -83,7 +80,7 @@ When('the user clicks the "My LQS302 Risk Evaluations (LEval)" card', async func
 });
 
 Then('the user is redirected to the LQS302 Risk Evaluations page', async function (this: ICustomWorld) {
-  await pageObject.expectLqs302CardRedirect();
+  await expect(this.page).toHaveURL(/.*lqs302-risk-evaluations/, { timeout: 5000 });
 });
 
 When('the user clicks the "My IT Assets" card', async function (this: ICustomWorld) {
@@ -91,17 +88,30 @@ When('the user clicks the "My IT Assets" card', async function (this: ICustomWor
 });
 
 Then('the user is redirected to the My IT Assets page', async function (this: ICustomWorld) {
-  await pageObject.expectItAssetsCardRedirect();
+  await expect(this.page).toHaveURL(/.*my-it-assets/, { timeout: 5000 });
+});
+
+Then('the "Home" tab is not highlighted as active/selected', async function (this: ICustomWorld) {
+  await pageObject.assertHomeTabNotActive();
+});
+
+Then('the "Automation Platform" dropdown is not visible', async function (this: ICustomWorld) {
+  await pageObject.assertNotVisible(pageObject.automationPlatformDropdown);
 });
 
 When('the user tries to click the "My IT Assets" card', async function (this: ICustomWorld) {
-  // No action as the card is not visible
+  // Attempting to click the card
+  try {
+    await pageObject.itAssetsCard.click();
+  } catch (error) {
+    // Catching click error
+  }
 });
 
 Then('the "My IT Assets" card is not visible', async function (this: ICustomWorld) {
-  await pageObject.expectItAssetsCardNotVisible();
+  await pageObject.assertNotVisible(pageObject.itAssetsCard);
 });
 
 Then('the click action on "My IT Assets" is not available', async function (this: ICustomWorld) {
-  await pageObject.expectItAssetsCardNotVisible();
+  await expect(pageObject.itAssetsCard).not.toBeEnabled({ timeout: 5000 });
 });
