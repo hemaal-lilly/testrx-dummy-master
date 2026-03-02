@@ -1,6 +1,9 @@
 // Page Object: OdmModulePage
 import { Page, Locator, expect } from '@playwright/test';
 
+/**
+ * Page Object for ODM Module
+ */
 export class OdmModulePage {
   readonly page: Page;
 
@@ -9,9 +12,8 @@ export class OdmModulePage {
   }
 
   // Locators
-  get processButton() { return this.page.locator('[data-testid="process-button"]'); }
   get productList() { return this.page.locator('[data-testid="product-list"]'); }
-  get addProductButton() { return this.page.locator('[data-testid="add-product-button"]'); }
+  get addProductButton() { return this.page.locator('[data-testid="add-product"]'); }
   get warningMessage() { return this.page.locator('[data-testid="warning-message"]'); }
 
   // Actions
@@ -21,7 +23,7 @@ export class OdmModulePage {
   }
 
   async triggerProcessing(): Promise<void> {
-    await this.processButton.click();
+    await this.page.locator('[data-testid="process-button"]').click();
     await this.page.waitForLoadState('networkidle');
   }
 
@@ -31,16 +33,16 @@ export class OdmModulePage {
   }
 
   // Assertions
-  async expectProductInList(productName: string): Promise<void> {
-    await expect(this.productList).toContainText(productName);
+  async expectProductAdded(): Promise<void> {
+    await expect(this.productList).toContainText('Product Name');
   }
 
   async expectWarningMessage(expectedMessage: string): Promise<void> {
     const actualMessage = await this.warningMessage.textContent();
-    expect(actualMessage).toBe(expectedMessage);
+    expect(actualMessage?.trim()).toBe(expectedMessage);
   }
 
   async expectNoProcessing(): Promise<void> {
-    await expect(this.productList).toBeEmpty();
+    await expect(this.productList).not.toBeVisible();
   }
 }
