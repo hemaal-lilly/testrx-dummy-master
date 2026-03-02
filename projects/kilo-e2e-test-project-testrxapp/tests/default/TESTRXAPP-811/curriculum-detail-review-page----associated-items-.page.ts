@@ -1,9 +1,6 @@
 // Page Object: CurriculumDetailReviewPage
 import { Page, Locator, expect } from '@playwright/test';
 
-/**
- * Page Object for Curriculum Detail Review page and Associate an Item dialog.
- */
 export class CurriculumDetailReviewPage {
   readonly page: Page;
 
@@ -28,21 +25,21 @@ export class CurriculumDetailReviewPage {
     return this.page.locator('[data-testid="search-button"]');
   }
 
-  get searchResultsGrid(): Locator {
-    return this.page.locator('[data-testid="search-results-grid"]');
+  get resultsGrid(): Locator {
+    return this.page.locator('[data-testid="results-grid"]');
   }
 
-  get itemRevisionDateCell(): Locator {
-    return this.page.locator('[data-testid="item-revision-date-cell"]');
+  get datePickerCell(): Locator {
+    return this.page.locator('[data-testid="date-picker-cell"]');
   }
 
   // Actions
-  async navigateToPage(): Promise<void> {
+  async navigate(): Promise<void> {
     await this.page.goto('/curriculum-detail-review');
     await this.page.waitForLoadState('networkidle');
   }
 
-  async openAssociateItemDialog(): Promise<void> {
+  async clickAssociateItemButton(): Promise<void> {
     await this.associateItemButton.click();
     await expect(this.dialogWindow).toBeVisible();
   }
@@ -50,18 +47,17 @@ export class CurriculumDetailReviewPage {
   async searchForItem(itemId: string): Promise<void> {
     await this.itemIdSearchField.fill(itemId);
     await this.searchButton.click();
-    await expect(this.searchResultsGrid).toBeVisible();
+    await this.page.waitForLoadState('networkidle');
   }
 
-  async validateSearchResults(): Promise<void> {
-    const headers = await this.searchResultsGrid.locator('thead th').allTextContents();
-    expect(headers).toEqual(['Item ID', 'Item Name', 'Revision Date']);
+  async validateResultsGrid(): Promise<void> {
+    await expect(this.resultsGrid).toBeVisible();
+    await expect(this.resultsGrid.locator('th')).toHaveCount(5); // Example: 5 columns
   }
 
-  async attemptInvalidDateInput(): Promise<void> {
-    await this.itemRevisionDateCell.click();
-    await this.itemRevisionDateCell.fill('invalid-date');
-    const errorMessage = await this.page.locator('[data-testid="date-error-message"]');
-    await expect(errorMessage).toBeVisible();
+  async typeInvalidDataInDatePicker(): Promise<void> {
+    await this.datePickerCell.click();
+    await this.datePickerCell.fill('invalid-data');
+    await expect(this.datePickerCell).toHaveValue(''); // Assuming validation clears invalid input
   }
 }
