@@ -2,7 +2,7 @@
  * Auto-generated Playwright test
  * Test: Test_csa_launchpad
  * Project: proj_e8e80b6c
- * Generated: 2026-03-02T09:40:14.022Z
+ * Generated: 2026-03-02T12:06:09.056Z
  * 
  * @generated
  */
@@ -13,9 +13,9 @@ import { test, expect } from '@playwright/test';
 Feature: Test_csa_launchpad
   As a user
   I want to navigate to the Playwright homepage
-  So that I can verify the presence of the Node.js button
+  So that I can verify the presence of the "Node.js" button
 
   Scenario: Verify Node.js button on Playwright homepage
     Given I am on the Playwright homepage
-    When I check for the Node.js button
-    Then I should see the Node.js button
+    When I check for the "Node.js" button
+    Then I should see the "Node.js" button displayed
