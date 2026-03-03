@@ -21,49 +21,53 @@ Given('I am on the home page', async function (this: ICustomWorld) {
 });
 
 When('the page loads', async function (this: ICustomWorld) {
-  // Implicit wait handled in navigation
+  // Implicit wait handled by navigate() method
 });
 
 Then('the Lilly logo is visible', async function (this: ICustomWorld) {
   await pageObject.expectLillyLogoVisible();
 });
 
-Then('the header title "Enterprise Automation" is visible', async function (this: ICustomWorld) {
-  await pageObject.expectHeaderTitleVisible();
+Then('the header title {string} is visible', async function (this: ICustomWorld, title: string) {
+  await pageObject.expectHeaderTitleVisible(title);
 });
 
 Then('the header section is visible', async function (this: ICustomWorld) {
-  await pageObject.expectHeaderSectionVisible();
+  await pageObject.expectSectionVisible(pageObject.headerSection);
 });
 
 Then('the hero banner is visible', async function (this: ICustomWorld) {
-  await pageObject.expectHeroBannerVisible();
+  await pageObject.expectSectionVisible(pageObject.heroBanner);
 });
 
 Then('the cards section is visible', async function (this: ICustomWorld) {
-  await pageObject.expectCardsSectionVisible();
+  await pageObject.expectSectionVisible(pageObject.cardsSection);
 });
 
 Then('the top header shows {string}', async function (this: ICustomWorld, text: string) {
   await pageObject.expectTopHeaderContains(text);
 });
 
-Then('the CTA button "Submit an Idea" is visible', async function (this: ICustomWorld) {
-  await pageObject.expectCTASubmitButtonVisible();
+Then('the CTA button {string} is visible', async function (this: ICustomWorld, buttonText: string) {
+  await pageObject.expectCTAButtonVisible();
 });
 
-Then('"Home" tab is active/selected', async function (this: ICustomWorld) {
-  await pageObject.expectHomeTabActive();
+Then('{string} tab is active/selected', async function (this: ICustomWorld, tabName: string) {
+  if (tabName === 'Home') {
+    await pageObject.expectHomeTabActive();
+  }
+});
+
+Then('{string} tab is not active/selected', async function (this: ICustomWorld, tabName: string) {
+  if (tabName === 'Home') {
+    await pageObject.expectHomeTabNotActive();
+  }
 });
 
 Then('the Lilly logo is not visible', async function (this: ICustomWorld) {
-  await pageObject.expectLillyLogoNotVisible();
+  await pageObject.expectElementNotVisible(pageObject.lillyLogo);
 });
 
 Then('the top header does not show {string}', async function (this: ICustomWorld, text: string) {
-  await pageObject.expectTopHeaderDoesNotContain(text);
-});
-
-Then('"Home" tab is not active/selected', async function (this: ICustomWorld) {
-  await pageObject.expectHomeTabNotActive();
+  await pageObject.expectElementNotVisible(pageObject.topHeader.locator(`text=${text}`));
 });

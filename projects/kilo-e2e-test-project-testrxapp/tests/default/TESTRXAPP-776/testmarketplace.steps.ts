@@ -1,17 +1,17 @@
 // Step Definitions for: Test_marketPlace
 import { Given, When, Then } from '@cucumber/cucumber';
 import { ICustomWorld } from '../support/world';
-import { MarketplacePage } from '../pages/MarketplacePage';
+import { TestMarketplacePage } from '../pages/TestMarketplacePage';
 
-let pageObject: MarketplacePage;
+let pageObject: TestMarketplacePage;
 
 Given('the marketplace page is loaded', async function (this: ICustomWorld) {
-  pageObject = new MarketplacePage(this.page);
-  await pageObject.navigate();
+  pageObject = new TestMarketplacePage(this.page);
+  await pageObject.navigateToMarketplace();
 });
 
 When('the page renders', async function () {
-  // No specific action required, page is already loaded
+  // No specific action required, page load is handled in the background step.
 });
 
 Then('the hero section is visible', async function () {
@@ -19,7 +19,7 @@ Then('the hero section is visible', async function () {
 });
 
 When('the hero section is viewed', async function () {
-  // No specific action required, hero section is already loaded
+  // No specific action required, hero section is already visible.
 });
 
 Then('the heading text equals {string}', async function (expectedText: string) {
@@ -39,27 +39,27 @@ Then('a hero image is displayed on the right side of the hero section', async fu
 });
 
 When('the user scrolls to the cards section', async function () {
-  await pageObject.cardsSectionTitle.scrollIntoViewIfNeeded();
+  await pageObject.scrollToCardsSection();
 });
 
-Then('the section title {string} is visible', async function (expectedText: string) {
-  await pageObject.expectCardsSectionTitleVisible(expectedText);
+Then('the section title {string} is visible', async function (expectedTitle: string) {
+  await pageObject.expectCardsSectionTitleVisible(expectedTitle);
 });
 
-When('the cards under the {string} section are viewed', async function () {
-  // No specific action required, cards section is already loaded
+When('the cards under the "Automation Tech for Tech" section are viewed', async function () {
+  // No specific action required, cards section is already visible.
 });
 
-Then('exactly {int} cards are visible', async function (expectedCount: number) {
-  await pageObject.expectCardCount(expectedCount);
+Then('exactly three cards are visible', async function () {
+  await pageObject.expectThreeCardsVisible();
 });
 
-Then('the card titles are {string}, {string}, and {string}', async function (title1: string, title2: string, title3: string) {
-  await pageObject.expectCardTitles([title1, title2, title3]);
+Then('the card titles are {string}, {string}, and {string}', async function (...expectedTitles: string[]) {
+  await pageObject.expectCardTitles(expectedTitles);
 });
 
-When('each displayed card under the {string} section is inspected', async function () {
-  // No specific action required, cards are already loaded
+When('each displayed card under the "Automation Tech for Tech" section is inspected', async function () {
+  // No specific action required, cards are already visible.
 });
 
 Then('each card shows an image', async function () {
@@ -83,18 +83,24 @@ When('the browser is refreshed', async function () {
 });
 
 When('the page is hard reloaded bypassing cache', async function () {
-  await pageObject.hardReload();
+  await pageObject.hardReloadPage();
 });
 
 When('the browser window is resized between common mobile and desktop widths', async function () {
-  await pageObject.resizeWindow(375, 667); // Mobile size
-  await pageObject.resizeWindow(1280, 720); // Desktop size
+  const commonWidths = [
+    { width: 375, height: 667 }, // Mobile
+    { width: 768, height: 1024 }, // Tablet
+    { width: 1440, height: 900 }, // Desktop
+  ];
+  for (const { width, height } of commonWidths) {
+    await pageObject.resizeBrowserWindow(width, height);
+  }
 });
 
 Then('the hero section remains visible', async function () {
   await pageObject.expectHeroSectionVisible();
 });
 
-Then('the {string} section remains visible', async function (sectionTitle: string) {
-  await pageObject.expectCardsSectionTitleVisible(sectionTitle);
+Then('the "Automation Tech for Tech" section remains visible', async function () {
+  await pageObject.expectCardsSectionTitleVisible('Automation Tech for Tech');
 });
