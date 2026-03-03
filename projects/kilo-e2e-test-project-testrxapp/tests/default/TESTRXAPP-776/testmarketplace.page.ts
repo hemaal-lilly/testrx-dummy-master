@@ -1,7 +1,10 @@
-// Page Object: MarketplacePage
+// Page Object: TestMarketplacePage
 import { Page, Locator, expect } from '@playwright/test';
 
-export class MarketplacePage {
+/**
+ * Page Object for the Marketplace landing page.
+ */
+export class TestMarketplacePage {
   readonly page: Page;
 
   constructor(page: Page) {
@@ -19,21 +22,25 @@ export class MarketplacePage {
   get cardTitles() { return this.page.locator('[data-testid="card-title"]'); }
 
   // Actions
-  async navigate(): Promise<void> {
+  async navigateToMarketplace(): Promise<void> {
     await this.page.goto('https://playwright.dev/');
     await this.page.waitForLoadState('networkidle');
+  }
+
+  async scrollToCardsSection(): Promise<void> {
+    await this.cardsSectionTitle.scrollIntoViewIfNeeded();
   }
 
   async refreshPage(): Promise<void> {
     await this.page.reload({ waitUntil: 'networkidle' });
   }
 
-  async hardReload(): Promise<void> {
+  async hardReloadPage(): Promise<void> {
     await this.page.evaluate(() => location.reload(true));
     await this.page.waitForLoadState('networkidle');
   }
 
-  async resizeWindow(width: number, height: number): Promise<void> {
+  async resizeBrowserWindow(width: number, height: number): Promise<void> {
     await this.page.setViewportSize({ width, height });
   }
 
@@ -62,12 +69,12 @@ export class MarketplacePage {
     await expect(this.heroImage).toBeVisible({ timeout: 5000 });
   }
 
-  async expectCardsSectionTitleVisible(expectedText: string): Promise<void> {
-    await expect(this.cardsSectionTitle).toHaveText(expectedText, { timeout: 5000 });
+  async expectCardsSectionTitleVisible(expectedTitle: string): Promise<void> {
+    await expect(this.cardsSectionTitle).toHaveText(expectedTitle, { timeout: 5000 });
   }
 
-  async expectCardCount(expectedCount: number): Promise<void> {
-    await expect(this.cards).toHaveCount(expectedCount, { timeout: 5000 });
+  async expectThreeCardsVisible(): Promise<void> {
+    await expect(this.cards).toHaveCount(3, { timeout: 5000 });
   }
 
   async expectCardTitles(expectedTitles: string[]): Promise<void> {
@@ -79,9 +86,9 @@ export class MarketplacePage {
     const cardsCount = await this.cards.count();
     for (let i = 0; i < cardsCount; i++) {
       const card = this.cards.nth(i);
-      await expect(card.locator('[data-testid="card-image"]')).toBeVisible({ timeout: 5000 });
-      await expect(card.locator('[data-testid="card-title"]')).toBeVisible({ timeout: 5000 });
-      await expect(card.locator('[data-testid="card-description"]')).toBeVisible({ timeout: 5000 });
+      await expect(card.locator('[data-testid="card-image"]')).toBeVisible();
+      await expect(card.locator('[data-testid="card-title"]')).toBeVisible();
+      await expect(card.locator('[data-testid="card-description"]')).toBeVisible();
     }
   }
 }
