@@ -1,7 +1,7 @@
 // Step Definitions for: Enterprise Automation homepage UI visibility and state
 import { Given, When, Then } from '@cucumber/cucumber';
 import { ICustomWorld } from '../../../support/world';
-import { EnterpriseAutomationPage } from './enterpriseautomation.page';
+import { EnterpriseAutomationPage } from './testmarketplaceshankar.page';
 
 let pageObject: EnterpriseAutomationPage;
 
