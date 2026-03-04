@@ -2,7 +2,7 @@
 import { Given, When, Then } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import { ICustomWorld } from '../../../support/world';
-import { ProvisionServiceAccountAndAccessPage } from './provision-service-account-and-access.page';
+import { ProvisionServiceAccountAndAccessPage } from './provision-service-account-and-access-for-nitrosami.page';
 
 let pageObject: ProvisionServiceAccountAndAccessPage;
 
