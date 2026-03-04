@@ -12,7 +12,7 @@ Given('the marketplace page is loaded', async function (this: ICustomWorld) {
 });
 
 When('the page renders', async function () {
-  // No additional actions needed; page load is handled in the background step
+  // No specific action needed, page is already loaded
 });
 
 Then('the hero section is visible', async function () {
@@ -20,7 +20,7 @@ Then('the hero section is visible', async function () {
 });
 
 When('the hero section is viewed', async function () {
-  // No additional actions needed; hero section visibility is checked in assertions
+  // No specific action needed, hero section is already visible
 });
 
 Then('the heading text equals {string}', async function (expectedText: string) {
@@ -40,15 +40,15 @@ Then('a hero image is displayed on the right side of the hero section', async fu
 });
 
 When('the user scrolls to the cards section', async function () {
-  await pageObject.scrollToCardsSection();
+  await pageObject.cardsSectionTitle.scrollIntoViewIfNeeded();
 });
 
-Then('the section title {string} is visible', async function (expectedTitle: string) {
-  await pageObject.expectCardsSectionTitleVisible(expectedTitle);
+Then('the section title {string} is visible', async function (expectedText: string) {
+  await pageObject.expectCardsSectionTitleVisible(expectedText);
 });
 
 When('the cards under the {string} section are viewed', async function () {
-  // No additional actions needed; cards visibility is checked in assertions
+  // No specific action needed, cards are already visible
 });
 
 Then('exactly {int} cards are visible', async function (expectedCount: number) {
@@ -61,19 +61,19 @@ Then('the card titles are {string}', async function (expectedTitles: string) {
 });
 
 When('each displayed card under the {string} section is inspected', async function () {
-  // No additional actions needed; card inspection is handled in assertions
+  // No specific action needed, inspecting cards
 });
 
 Then('each card shows an image', async function () {
-  await pageObject.expectEachCardHasImageTitleDescription();
+  await pageObject.expectEachCardElementsVisible();
 });
 
 Then('each card shows a title', async function () {
-  await pageObject.expectEachCardHasImageTitleDescription();
+  await pageObject.expectEachCardElementsVisible();
 });
 
 Then('each card shows supporting descriptive text', async function () {
-  await pageObject.expectEachCardHasImageTitleDescription();
+  await pageObject.expectEachCardElementsVisible();
 });
 
 Then('the "Get Started" button is not visible', async function () {
@@ -89,14 +89,14 @@ When('the page is hard reloaded bypassing cache', async function () {
 });
 
 When('the browser window is resized between common mobile and desktop widths', async function () {
-  await pageObject.resizeWindow(375, 667); // Mobile
-  await pageObject.resizeWindow(1280, 720); // Desktop
+  await pageObject.resizeBrowser(375, 812); // Mobile
+  await pageObject.resizeBrowser(1280, 720); // Desktop
 });
 
 Then('the hero section remains visible', async function () {
   await pageObject.expectHeroSectionVisible();
 });
 
-Then('the {string} section remains visible', async function (expectedTitle: string) {
-  await pageObject.expectCardsSectionTitleVisible(expectedTitle);
+Then('the {string} section remains visible', async function (expectedText: string) {
+  await pageObject.expectCardsSectionTitleVisible(expectedText);
 });
