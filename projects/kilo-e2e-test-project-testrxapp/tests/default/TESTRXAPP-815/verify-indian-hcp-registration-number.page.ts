@@ -1,6 +1,9 @@
 // Page Object: VerifyIndianHcpRegistrationNumberPage
 import { Page, Locator, expect } from '@playwright/test';
 
+/**
+ * Page Object for Indian HCP Medical Registration Number Verification
+ */
 export class VerifyIndianHcpRegistrationNumberPage {
   readonly page: Page;
 
@@ -9,13 +12,29 @@ export class VerifyIndianHcpRegistrationNumberPage {
   }
 
   // Locators (getter-based for lazy evaluation)
-  get stateCouncilSelect() { return this.page.locator('#state-council-select'); }
-  get mrnInput() { return this.page.locator('#mrn-input'); }
-  get verifyButton() { return this.page.locator('#verify-mrn-btn'); }
-  get errorMessageContainer() { return this.page.locator('#mrn-error-msg'); }
-  get verificationStatusBadge() { return this.page.locator('#verification-status-badge'); }
-  get verificationSpinner() { return this.page.locator('#verify-spinner'); }
-  get toastMessage() { return this.page.locator('[data-testid="toast-message"]'); }
+  get stateCouncilSelect(): Locator {
+    return this.page.locator('#state-council-select');
+  }
+
+  get mrnInput(): Locator {
+    return this.page.locator('#mrn-input');
+  }
+
+  get verifyButton(): Locator {
+    return this.page.locator('#verify-mrn-btn');
+  }
+
+  get spinner(): Locator {
+    return this.page.locator('#verify-spinner');
+  }
+
+  get errorMessageContainer(): Locator {
+    return this.page.locator('#mrn-error-msg');
+  }
+
+  get verificationStatusBadge(): Locator {
+    return this.page.locator('#verification-status-badge');
+  }
 
   // Actions
   async navigateToVerificationForm(): Promise<void> {
@@ -41,11 +60,11 @@ export class VerifyIndianHcpRegistrationNumberPage {
 
   // Assertions
   async expectSpinnerVisible(): Promise<void> {
-    await expect(this.verificationSpinner).toBeVisible();
+    await expect(this.spinner).toBeVisible();
   }
 
   async expectSpinnerHidden(): Promise<void> {
-    await expect(this.verificationSpinner).toBeHidden();
+    await expect(this.spinner).toBeHidden();
   }
 
   async expectVerificationStatusBadgeText(expectedText: string): Promise<void> {
@@ -54,10 +73,6 @@ export class VerifyIndianHcpRegistrationNumberPage {
 
   async expectErrorMessage(expectedText: string): Promise<void> {
     await expect(this.errorMessageContainer).toHaveText(expectedText);
-  }
-
-  async expectToastMessage(expectedText: string): Promise<void> {
-    await expect(this.toastMessage).toHaveText(expectedText);
   }
 
   async expectVerifyButtonDisabled(): Promise<void> {

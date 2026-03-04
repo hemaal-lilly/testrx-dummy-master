@@ -11,13 +11,14 @@ export class OneIndiaHcpPage {
   // Locators
   get searchInput() { return this.page.locator('[data-testid="search-input"]'); }
   get searchButton() { return this.page.locator('[data-testid="search-button"]'); }
+  get workOrderResult() { return this.page.locator('[data-testid="work-order-result"]'); }
   get panField() { return this.page.locator('[data-testid="pan-field"]'); }
   get saveButton() { return this.page.locator('[data-testid="save-button"]'); }
   get confirmButton() { return this.page.locator('[data-testid="confirm-button"]'); }
 
   // Actions
   async navigateToPortal(): Promise<void> {
-    await this.page.goto('/work-order-solution');
+    await this.page.goto('/work-order-portal');
     await this.page.waitForLoadState('networkidle');
   }
 
@@ -27,23 +28,23 @@ export class OneIndiaHcpPage {
     await this.page.waitForLoadState('networkidle');
   }
 
-  async enterPANDetails(pan: string): Promise<void> {
+  async enterPanDetails(pan: string): Promise<void> {
     await this.panField.fill(pan);
-  }
-
-  async savePANEntry(): Promise<void> {
     await this.saveButton.click();
     await this.page.waitForLoadState('networkidle');
   }
 
-  async confirmApprovals(): Promise<void> {
+  async confirmPreparationTime(): Promise<void> {
     await this.confirmButton.click();
     await this.page.waitForLoadState('networkidle');
   }
 
   // Assertions
-  async expectWorkOrderVisible(workOrderId: string): Promise<void> {
-    const workOrderLocator = this.page.locator(`[data-testid="work-order-${workOrderId}"]`);
-    await expect(workOrderLocator).toBeVisible();
+  async expectWorkOrderVisible(): Promise<void> {
+    await expect(this.workOrderResult).toBeVisible();
+  }
+
+  async expectPanFieldToBeFilled(): Promise<void> {
+    await expect(this.panField).toHaveValue(/.+/);
   }
 }

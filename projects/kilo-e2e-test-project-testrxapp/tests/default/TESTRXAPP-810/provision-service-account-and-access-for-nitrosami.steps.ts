@@ -4,39 +4,46 @@ import { expect } from '@playwright/test';
 import { ICustomWorld } from '../../../support/world';
 import { ProvisionServiceAccountAndAccessForNitrosamineAutomationPage } from './provision-service-account-and-access-for-nitrosami.page';
 
-let provisionPage: ProvisionServiceAccountAndAccessForNitrosamineAutomationPage;
+let pageObject: ProvisionServiceAccountAndAccessForNitrosamineAutomationPage;
 
-Given('I am signed in as {string}', async function (this: ICustomWorld, accountName: string) {
-  provisionPage = new ProvisionServiceAccountAndAccessForNitrosamineAutomationPage(this.page);
-  await provisionPage.signIn(accountName);
+Given('I sign in to the email client as {string}', async function (this: ICustomWorld, accountName: string) {
+  pageObject = new ProvisionServiceAccountAndAccessForNitrosamineAutomationPage(this.page);
+  await pageObject.navigateToEmailClient();
 });
 
-When('I compose and send an email to {string} with a unique subject and body', async function (this: ICustomWorld, recipient: string) {
+When('I compose a new email to {string} with a unique subject and body', async function (this: ICustomWorld, recipient: string) {
   const uniqueSubject = `Test Subject ${Date.now()}`;
   const uniqueBody = `Test Body ${Date.now()}`;
-  await provisionPage.composeEmail(uniqueSubject, uniqueBody);
-  await provisionPage.sendEmail();
+  await pageObject.composeEmail(recipient, uniqueSubject, uniqueBody);
 });
 
-Then('I should see the email in the recipient\'s inbox and send a reply back', async function (this: ICustomWorld) {
-  await provisionPage.verifyEmailSent();
+When('I send the email', async function (this: ICustomWorld) {
+  await pageObject.sendEmail();
+});
+
+Then('I should see the email in the monitoring recipient mailbox', async function (this: ICustomWorld) {
+  await pageObject.validateEmailReceived();
 });
 
 Given('I start a new provisioning request for the Nitrosamine service account', async function (this: ICustomWorld) {
-  // No explicit action needed for this step
+  await pageObject.navigateToProvisioningForm();
 });
 
-When('I populate the required fields and submit the request', async function (this: ICustomWorld) {
-  const requestData = {
-    account_name: 'svc_nitrosamine_bot',
-    unix_groups: ['brainiac-compute', 'gaussian'],
-    lrlhps_path: '/lrlhps/data/NirtosamineCalculation /Prod',
-    guava_path: '\\guava\\guava.grp\\MDPRDAUTOMATION\\PRD\\Nitrosamine_Calculation',
-    monitoring_distribution: ['nitroso-ops@corp.example']
+When('I populate the fields with valid data', async function (this: ICustomWorld) {
+  const provisioningData = {
+    accountName: 'svc_nitrosamine_bot',
+    unixGroups: ['brainiac-compute', 'gaussian'],
+    lrlhpsPath: '/lrlhps/data/NirtosamineCalculation/Prod',
+    guavaPath: '\\guava\\guava.grp\\MDPRDAUTOMATION\\PRD\\Nitrosamine_Calculation',
+    monitoringDistribution: ['nitroso-ops@corp.example'],
   };
-  await provisionPage.submitProvisioningRequest(requestData);
+  await pageObject.fillProvisioningForm(provisioningData);
 });
 
-Then('I should verify the provisioning request is successful', async function (this: ICustomWorld) {
-  await provisionPage.verifyProvisioningSuccess();
+When('I submit the provisioning request', async function (this: ICustomWorld) {
+  await pageObject.submitProvisioningRequest();
+});
+
+Then('the provisioning request should be successful', async function (this: ICustomWorld) {
+  await pageObject.validateProvisioningSuccess();
 });

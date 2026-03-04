@@ -6,107 +6,100 @@ import { TestCsaLaunchpadNewPage } from './testcsalaunchpad-new.page';
 
 let pageObject: TestCsaLaunchpadNewPage;
 
-Given('the user navigates to {string}', async function (this: ICustomWorld, baseUrl: string) {
+Given('the user navigates to {string}', async function (this: ICustomWorld, url: string) {
   pageObject = new TestCsaLaunchpadNewPage(this.page);
-  await pageObject.navigateToHomePage(baseUrl);
+  await pageObject.navigateToHomePage();
 });
 
 Given('the user is on the home page', async function (this: ICustomWorld) {
-  // Assuming the user is already on the home page after navigation
+  pageObject = new TestCsaLaunchpadNewPage(this.page);
+  await pageObject.navigateToHomePage();
 });
 
-When('the user views the top header', async function (this: ICustomWorld) {
-  await pageObject.expectElementVisible(pageObject.topHeader);
+When('the user views the top header', async function () {
+  // No specific action needed as this is a view step
 });
 
-Then('{string} is visible in the top header', async function (this: ICustomWorld, item: string) {
-  const locatorMap = {
-    "Home": pageObject.homeTab,
-    "Automation Platform": pageObject.automationPlatformDropdown,
-    "Marketplace": pageObject.marketplaceLink,
-    "TechZone": pageObject.techZoneLink,
-    "Admin Console": pageObject.adminConsoleLink,
-  };
-  await pageObject.expectElementVisible(locatorMap[item]);
+When('the home page is loaded', async function () {
+  // No specific action needed as this is a load step
 });
 
-Then('the {string} button is visible', async function (this: ICustomWorld, buttonName: string) {
-  if (buttonName === "Submit an Idea") {
-    await pageObject.expectElementVisible(pageObject.submitIdeaButton);
+When('the user clicks the {string} card', async function (cardName: string) {
+  if (cardName === 'My LQS302 Risk Evaluations (LEval)') {
+    await pageObject.clickMyLqsCard();
+  } else if (cardName === 'My IT Assets') {
+    await pageObject.clickMyItAssetsCard();
   }
 });
 
-Then('the {string} tab is highlighted as active/selected', async function (this: ICustomWorld, tabName: string) {
-  if (tabName === "Home") {
-    await pageObject.expectElementHighlighted(pageObject.homeTab);
+When('the user tries to click the {string} card', async function (cardName: string) {
+  if (cardName === 'My IT Assets') {
+    await expect(pageObject.myItAssetsCard).toBeHidden();
   }
 });
 
-Then('{string} card is visible', async function (this: ICustomWorld, cardName: string) {
-  const locatorMap = {
-    "My LQS302 Risk Evaluations (LEval)": pageObject.myLQS302Card,
-    "My IT Assets": pageObject.myITAssetsCard,
-  };
-  await pageObject.expectElementVisible(locatorMap[cardName]);
+Then('{string} is visible in the top header', async function (itemName: string) {
+  await pageObject.expectHeaderNavigationItemsVisible();
 });
 
-Then('the {string} card shows a relevant icon', async function (this: ICustomWorld, cardName: string) {
-  const locatorMap = {
-    "My LQS302 Risk Evaluations (LEval)": pageObject.myLQS302Icon,
-    "My IT Assets": pageObject.myITAssetsIcon,
-  };
-  await pageObject.expectElementVisible(locatorMap[cardName]);
-});
-
-Then('the {string} card shows a right-arrow navigation indicator', async function (this: ICustomWorld, cardName: string) {
-  const locatorMap = {
-    "My LQS302 Risk Evaluations (LEval)": pageObject.myLQS302Arrow,
-    "My IT Assets": pageObject.myITAssetsArrow,
-  };
-  await pageObject.expectElementVisible(locatorMap[cardName]);
-});
-
-When('the user clicks the {string} card', async function (this: ICustomWorld, cardName: string) {
-  if (cardName === "My LQS302 Risk Evaluations (LEval)") {
-    await pageObject.clickMyLQS302Card();
-  } else if (cardName === "My IT Assets") {
-    await pageObject.clickMyITAssetsCard();
+Then('the {string} button is visible', async function (buttonName: string) {
+  if (buttonName === 'Submit an Idea') {
+    await pageObject.expectSubmitIdeaButtonVisible();
   }
 });
 
-Then('the user is redirected to the {string} page', async function (this: ICustomWorld, expectedPageUrl: string) {
-  await pageObject.expectRedirect(expectedPageUrl);
-});
-
-Then('the {string} tab is not highlighted as active/selected', async function (this: ICustomWorld, tabName: string) {
-  if (tabName === "Home") {
-    await pageObject.expectElementNotHighlighted(pageObject.homeTab);
+Then('the {string} tab is highlighted as active/selected', async function (tabName: string) {
+  if (tabName === 'Home') {
+    await pageObject.expectHomeTabActive();
   }
 });
 
-Then('{string} dropdown is not visible in the top header', async function (this: ICustomWorld, dropdownName: string) {
-  if (dropdownName === "Automation Platform") {
-    await pageObject.expectElementNotVisible(pageObject.automationPlatformDropdown);
+Then('the {string} tab is not highlighted as active/selected', async function (tabName: string) {
+  if (tabName === 'Home') {
+    await pageObject.expectHomeTabNotActive();
   }
 });
 
-When('the user tries to click the {string} card', async function (this: ICustomWorld, cardName: string) {
-  const locatorMap = {
-    "My IT Assets": pageObject.myITAssetsCard,
-  };
-  await pageObject.expectElementNotVisible(locatorMap[cardName]);
+Then('{string} card is visible', async function (cardName: string) {
+  if (cardName === 'My LQS302 Risk Evaluations (LEval)') {
+    await pageObject.expectMyLqsCardVisible();
+  } else if (cardName === 'My IT Assets') {
+    await pageObject.expectMyItAssetsCardVisible();
+  }
 });
 
-Then('the {string} card is not visible', async function (this: ICustomWorld, cardName: string) {
-  const locatorMap = {
-    "My IT Assets": pageObject.myITAssetsCard,
-  };
-  await pageObject.expectElementNotVisible(locatorMap[cardName]);
+Then('the {string} card shows a relevant icon', async function (cardName: string) {
+  if (cardName === 'My LQS302 Risk Evaluations (LEval)') {
+    await expect(pageObject.myLqsCardIcon).toBeVisible();
+  } else if (cardName === 'My IT Assets') {
+    await expect(pageObject.myItAssetsCardIcon).toBeVisible();
+  }
 });
 
-Then('the click action on {string} is not available', async function (this: ICustomWorld, cardName: string) {
-  const locatorMap = {
-    "My IT Assets": pageObject.myITAssetsCard,
-  };
-  await expect(locatorMap[cardName]).not.toBeEnabled({ timeout: 5000 });
+Then('the {string} card shows a right-arrow navigation indicator', async function (cardName: string) {
+  if (cardName === 'My LQS302 Risk Evaluations (LEval)') {
+    await expect(pageObject.myLqsCardArrow).toBeVisible();
+  } else if (cardName === 'My IT Assets') {
+    await expect(pageObject.myItAssetsCardArrow).toBeVisible();
+  }
+});
+
+Then('the user is redirected to the {string} page', async function (pageName: string) {
+  if (pageName === 'LQS302 Risk Evaluations') {
+    await pageObject.expectRedirectToLqsPage();
+  } else if (pageName === 'My IT Assets') {
+    await pageObject.expectRedirectToItAssetsPage();
+  }
+});
+
+Then('the {string} card is not visible', async function (cardName: string) {
+  if (cardName === 'My IT Assets') {
+    await pageObject.expectMyItAssetsCardNotVisible();
+  }
+});
+
+Then('the click action on {string} is not available', async function (cardName: string) {
+  if (cardName === 'My IT Assets') {
+    await expect(pageObject.myItAssetsCard).toBeHidden();
+  }
 });

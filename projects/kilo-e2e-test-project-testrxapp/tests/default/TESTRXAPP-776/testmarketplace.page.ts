@@ -1,6 +1,9 @@
 // Page Object: TestMarketplacePage
 import { Page, Locator, expect } from '@playwright/test';
 
+/**
+ * Page Object for the Marketplace Page
+ */
 export class TestMarketplacePage {
   readonly page: Page;
 
@@ -26,53 +29,51 @@ export class TestMarketplacePage {
     await this.page.waitForLoadState('networkidle');
   }
 
-  async scrollToCardsSection(): Promise<void> {
-    await this.cardsSectionTitle.scrollIntoViewIfNeeded();
-  }
-
   async refreshPage(): Promise<void> {
-    await this.page.reload({ waitUntil: 'networkidle' });
+    await this.page.reload();
+    await this.page.waitForLoadState('networkidle');
   }
 
   async hardReloadPage(): Promise<void> {
-    await this.page.goto(this.page.url(), { timeout: 30000, waitUntil: 'networkidle' });
+    await this.page.reload({ waitUntil: 'load' });
+    await this.page.waitForLoadState('networkidle');
   }
 
-  async resizeWindow(width: number, height: number): Promise<void> {
+  async resizeBrowser(width: number, height: number): Promise<void> {
     await this.page.setViewportSize({ width, height });
   }
 
   // Assertions
   async expectHeroSectionVisible(): Promise<void> {
-    await expect(this.heroSection).toBeVisible();
+    await expect(this.heroSection).toBeVisible({ timeout: 5000 });
   }
 
   async expectHeroHeadingText(expectedText: string): Promise<void> {
-    await expect(this.heroHeading).toHaveText(expectedText);
+    await expect(this.heroHeading).toHaveText(expectedText, { timeout: 5000 });
   }
 
   async expectHeroDescriptionVisible(): Promise<void> {
-    await expect(this.heroDescription).toBeVisible();
+    await expect(this.heroDescription).toBeVisible({ timeout: 5000 });
   }
 
   async expectGetStartedButtonVisible(): Promise<void> {
-    await expect(this.getStartedButton).toBeVisible();
+    await expect(this.getStartedButton).toBeVisible({ timeout: 5000 });
   }
 
   async expectGetStartedButtonNotVisible(): Promise<void> {
-    await expect(this.getStartedButton).toBeHidden();
+    await expect(this.getStartedButton).toBeHidden({ timeout: 5000 });
   }
 
   async expectHeroImageVisible(): Promise<void> {
-    await expect(this.heroImage).toBeVisible();
+    await expect(this.heroImage).toBeVisible({ timeout: 5000 });
   }
 
-  async expectCardsSectionTitleVisible(expectedTitle: string): Promise<void> {
-    await expect(this.cardsSectionTitle).toHaveText(expectedTitle);
+  async expectCardsSectionTitleVisible(expectedText: string): Promise<void> {
+    await expect(this.cardsSectionTitle).toHaveText(expectedText, { timeout: 5000 });
   }
 
   async expectCardsCount(expectedCount: number): Promise<void> {
-    await expect(this.cards).toHaveCount(expectedCount);
+    await expect(this.cards).toHaveCount(expectedCount, { timeout: 5000 });
   }
 
   async expectCardTitles(expectedTitles: string[]): Promise<void> {
@@ -80,12 +81,9 @@ export class TestMarketplacePage {
     expect(titles).toEqual(expectedTitles);
   }
 
-  async expectEachCardHasImageTitleDescription(): Promise<void> {
-    const cardCount = await this.cards.count();
-    for (let i = 0; i < cardCount; i++) {
-      await expect(this.cardImages.nth(i)).toBeVisible();
-      await expect(this.cardTitles.nth(i)).toBeVisible();
-      await expect(this.cardDescriptions.nth(i)).toBeVisible();
-    }
+  async expectEachCardElementsVisible(): Promise<void> {
+    await expect(this.cardImages).toBeVisible({ timeout: 5000 });
+    await expect(this.cardTitles).toBeVisible({ timeout: 5000 });
+    await expect(this.cardDescriptions).toBeVisible({ timeout: 5000 });
   }
 }
