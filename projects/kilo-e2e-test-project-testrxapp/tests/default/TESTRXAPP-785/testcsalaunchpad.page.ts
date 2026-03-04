@@ -9,17 +9,17 @@ export class TestCsaLaunchpadPage {
   }
 
   /**
-   * Navigate to the specified URL.
-   * @param url - The URL to navigate to.
+   * Navigate to the Playwright launchpad page.
+   * @param url - The URL of the Playwright launchpad page.
    */
-  async navigate(url: string): Promise<void> {
+  async navigateTo(url: string): Promise<void> {
     await this.page.goto(url);
     await this.page.waitForLoadState('networkidle');
   }
 
   /**
    * Assert the page title matches the expected title.
-   * @param expectedTitle - The expected page title.
+   * @param expectedTitle - The expected title of the page.
    */
   async assertPageTitle(expectedTitle: string): Promise<void> {
     await expect(this.page).toHaveTitle(expectedTitle);
