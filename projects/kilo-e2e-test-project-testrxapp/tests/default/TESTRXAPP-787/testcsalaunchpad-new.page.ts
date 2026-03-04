@@ -9,54 +9,77 @@ export class TestCsaLaunchpadNewPage {
   }
 
   // Locators (getter-based for lazy evaluation)
-  get topHeader() { return this.page.locator('[data-testid="top-header"]'); }
   get homeTab() { return this.page.locator('[data-testid="home-tab"]'); }
-  get submitIdeaButton() { return this.page.locator('[data-testid="submit-idea-button"]'); }
   get automationPlatformDropdown() { return this.page.locator('[data-testid="automation-platform-dropdown"]'); }
   get marketplaceLink() { return this.page.locator('[data-testid="marketplace-link"]'); }
   get techZoneLink() { return this.page.locator('[data-testid="techzone-link"]'); }
   get adminConsoleLink() { return this.page.locator('[data-testid="admin-console-link"]'); }
-  get myLQS302Card() { return this.page.locator('[data-testid="my-lqs302-card"]'); }
-  get myITAssetsCard() { return this.page.locator('[data-testid="my-it-assets-card"]'); }
-  get myLQS302Icon() { return this.page.locator('[data-testid="my-lqs302-icon"]'); }
-  get myLQS302Arrow() { return this.page.locator('[data-testid="my-lqs302-arrow"]'); }
-  get myITAssetsIcon() { return this.page.locator('[data-testid="my-it-assets-icon"]'); }
-  get myITAssetsArrow() { return this.page.locator('[data-testid="my-it-assets-arrow"]'); }
+  get submitIdeaButton() { return this.page.locator('[data-testid="submit-idea-button"]'); }
+  get myLqsCard() { return this.page.locator('[data-testid="my-lqs-card"]'); }
+  get myItAssetsCard() { return this.page.locator('[data-testid="my-it-assets-card"]'); }
+  get myLqsCardIcon() { return this.page.locator('[data-testid="my-lqs-card-icon"]'); }
+  get myLqsCardArrow() { return this.page.locator('[data-testid="my-lqs-card-arrow"]'); }
+  get myItAssetsCardIcon() { return this.page.locator('[data-testid="my-it-assets-card-icon"]'); }
+  get myItAssetsCardArrow() { return this.page.locator('[data-testid="my-it-assets-card-arrow"]'); }
 
   // Actions
-  async navigateToHomePage(baseUrl: string): Promise<void> {
-    await this.page.goto(baseUrl);
+  async navigateToHomePage(): Promise<void> {
+    await this.page.goto('https://qa.csalaunchpad.lilly.com');
     await this.page.waitForLoadState('networkidle');
   }
 
-  async clickMyLQS302Card(): Promise<void> {
-    await this.myLQS302Card.click();
+  async clickMyLqsCard(): Promise<void> {
+    await this.myLqsCard.click();
     await this.page.waitForLoadState('networkidle');
   }
 
-  async clickMyITAssetsCard(): Promise<void> {
-    await this.myITAssetsCard.click();
+  async clickMyItAssetsCard(): Promise<void> {
+    await this.myItAssetsCard.click();
     await this.page.waitForLoadState('networkidle');
   }
 
   // Assertions
-  async expectElementVisible(locator: Locator): Promise<void> {
-    await expect(locator).toBeVisible({ timeout: 5000 });
+  async expectHeaderNavigationItemsVisible(): Promise<void> {
+    await expect(this.homeTab).toBeVisible();
+    await expect(this.automationPlatformDropdown).toBeVisible();
+    await expect(this.marketplaceLink).toBeVisible();
+    await expect(this.techZoneLink).toBeVisible();
+    await expect(this.adminConsoleLink).toBeVisible();
   }
 
-  async expectElementNotVisible(locator: Locator): Promise<void> {
-    await expect(locator).toBeHidden({ timeout: 5000 });
+  async expectSubmitIdeaButtonVisible(): Promise<void> {
+    await expect(this.submitIdeaButton).toBeVisible();
   }
 
-  async expectElementHighlighted(locator: Locator): Promise<void> {
-    await expect(locator).toHaveClass(/active|selected/, { timeout: 5000 });
+  async expectHomeTabActive(): Promise<void> {
+    await expect(this.homeTab).toHaveClass(/active/);
   }
 
-  async expectElementNotHighlighted(locator: Locator): Promise<void> {
-    await expect(locator).not.toHaveClass(/active|selected/, { timeout: 5000 });
+  async expectHomeTabNotActive(): Promise<void> {
+    await expect(this.homeTab).not.toHaveClass(/active/);
   }
 
-  async expectRedirect(expectedUrl: string): Promise<void> {
-    await expect(this.page).toHaveURL(expectedUrl, { timeout: 5000 });
+  async expectMyLqsCardVisible(): Promise<void> {
+    await expect(this.myLqsCard).toBeVisible();
+    await expect(this.myLqsCardIcon).toBeVisible();
+    await expect(this.myLqsCardArrow).toBeVisible();
+  }
+
+  async expectMyItAssetsCardVisible(): Promise<void> {
+    await expect(this.myItAssetsCard).toBeVisible();
+    await expect(this.myItAssetsCardIcon).toBeVisible();
+    await expect(this.myItAssetsCardArrow).toBeVisible();
+  }
+
+  async expectMyItAssetsCardNotVisible(): Promise<void> {
+    await expect(this.myItAssetsCard).toBeHidden();
+  }
+
+  async expectRedirectToLqsPage(): Promise<void> {
+    await expect(this.page).toHaveURL(/\/lqs302-risk-evaluations/);
+  }
+
+  async expectRedirectToItAssetsPage(): Promise<void> {
+    await expect(this.page).toHaveURL(/\/my-it-assets/);
   }
 }
