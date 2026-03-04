@@ -12,44 +12,22 @@ export class ProvisionServiceAccountAndAccessForNitrosamineAutomationPage {
   }
 
   // Locators
-  get signInButton(): Locator {
-    return this.page.locator('[data-testid="sign-in"]');
-  }
-
-  get emailInput(): Locator {
-    return this.page.locator('[data-testid="email-input"]');
-  }
-
-  get subjectInput(): Locator {
-    return this.page.locator('[data-testid="subject-input"]');
-  }
-
-  get bodyInput(): Locator {
-    return this.page.locator('[data-testid="body-input"]');
-  }
-
-  get sendButton(): Locator {
-    return this.page.locator('[data-testid="send-button"]');
-  }
-
-  get provisioningForm(): Locator {
-    return this.page.locator('[data-testid="provisioning-form"]');
-  }
-
-  get submitRequestButton(): Locator {
-    return this.page.locator('[data-testid="submit-request"]');
-  }
+  get emailInput() { return this.page.locator('[data-testid="email-input"]'); }
+  get subjectInput() { return this.page.locator('[data-testid="subject-input"]'); }
+  get bodyInput() { return this.page.locator('[data-testid="body-input"]'); }
+  get sendButton() { return this.page.locator('[data-testid="send-button"]'); }
+  get monitoringMailbox() { return this.page.locator('[data-testid="monitoring-mailbox"]'); }
+  get provisioningForm() { return this.page.locator('[data-testid="provisioning-form"]'); }
+  get submitButton() { return this.page.locator('[data-testid="submit-button"]'); }
 
   // Actions
-  async signIn(email: string): Promise<void> {
-    await this.page.goto('/login');
-    await this.page.waitForLoadState('networkidle');
-    await this.emailInput.fill(email);
-    await this.signInButton.click();
+  async navigateToEmailClient(): Promise<void> {
+    await this.page.goto('/email-client');
     await this.page.waitForLoadState('networkidle');
   }
 
-  async composeEmail(subject: string, body: string): Promise<void> {
+  async composeEmail(recipient: string, subject: string, body: string): Promise<void> {
+    await this.emailInput.fill(recipient);
     await this.subjectInput.fill(subject);
     await this.bodyInput.fill(body);
   }
@@ -59,20 +37,26 @@ export class ProvisionServiceAccountAndAccessForNitrosamineAutomationPage {
     await this.page.waitForLoadState('networkidle');
   }
 
-  async submitProvisioningRequest(data: Record<string, string | string[]>): Promise<void> {
-    await this.provisioningForm.fill(JSON.stringify(data));
-    await this.submitRequestButton.click();
+  async validateEmailReceived(): Promise<void> {
+    await expect(this.monitoringMailbox).toBeVisible();
+    await expect(this.monitoringMailbox).toContainText('Subject:');
+  }
+
+  async navigateToProvisioningForm(): Promise<void> {
+    await this.page.goto('/provisioning-form');
     await this.page.waitForLoadState('networkidle');
   }
 
-  // Assertions
-  async verifyEmailSent(): Promise<void> {
-    const confirmationMessage = this.page.locator('[data-testid="email-sent-confirmation"]');
-    await expect(confirmationMessage).toBeVisible();
+  async fillProvisioningForm(data: { accountName: string; unixGroups: string[]; lrlhpsPath: string; guavaPath: string; monitoringDistribution: string[] }): Promise<void> {
+    await this.provisioningForm.fill(JSON.stringify(data));
   }
 
-  async verifyProvisioningSuccess(): Promise<void> {
-    const successMessage = this.page.locator('[data-testid="provisioning-success"]');
-    await expect(successMessage).toBeVisible();
+  async submitProvisioningRequest(): Promise<void> {
+    await this.submitButton.click();
+    await this.page.waitForLoadState('networkidle');
+  }
+
+  async validateProvisioningSuccess(): Promise<void> {
+    await expect(this.page).toHaveURL(/success/);
   }
 }
