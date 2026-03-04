@@ -2,7 +2,7 @@
 import { Given, When, Then } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import { ICustomWorld } from '../../../support/world';
-import { CurriculumDetailReviewPageAssociatedItemsGridAssociateAnItemDialogWindowAndGridPage } from './curriculum-detail-review-page-associated-items-grid.page';
+import { CurriculumDetailReviewPageAssociatedItemsGridAssociateAnItemDialogWindowAndGridPage } from './curriculum-detail-review-page----associated-items-.page';
 
 let pageObject: CurriculumDetailReviewPageAssociatedItemsGridAssociateAnItemDialogWindowAndGridPage;
 
