@@ -1,9 +1,6 @@
 // Page Object: ImplementExceptionHandlingAndMonitoringNotificationsPage
 import { Page, Locator, expect } from '@playwright/test';
 
-/**
- * Page Object for Exception Handling and Monitoring Notifications
- */
 export class ImplementExceptionHandlingAndMonitoringNotificationsPage {
   readonly page: Page;
 
@@ -16,12 +13,9 @@ export class ImplementExceptionHandlingAndMonitoringNotificationsPage {
   get stakeholderRecipientsInput() { return this.page.locator('[data-testid="stakeholder-recipients"]'); }
   get logPathInput() { return this.page.locator('[data-testid="log-path"]'); }
   get retryAttemptsInput() { return this.page.locator('[data-testid="retry-attempts"]'); }
-  get moleculeIdInput() { return this.page.locator('[data-testid="molecule-id"]'); }
-  get projectInput() { return this.page.locator('[data-testid="project"]'); }
-  get exceptionLogEntry() { return this.page.locator('[data-testid="exception-log-entry"]'); }
-  get errorNotification() { return this.page.locator('[data-testid="error-notification"]'); }
-  get stopNotification() { return this.page.locator('[data-testid="stop-notification"]'); }
-  get retryPolicyLog() { return this.page.locator('[data-testid="retry-policy-log"]'); }
+  get processExceptionAlert() { return this.page.locator('[data-testid="process-exception-alert"]'); }
+  get errorNotificationEmail() { return this.page.locator('[data-testid="error-notification-email"]'); }
+  get logEntry() { return this.page.locator('[data-testid="log-entry"]'); }
 
   // Actions
   async configureMonitoringDistribution(email: string): Promise<void> {
@@ -40,37 +34,32 @@ export class ImplementExceptionHandlingAndMonitoringNotificationsPage {
     await this.retryAttemptsInput.fill(attempts.toString());
   }
 
-  async configureMoleculeDetails(moleculeId: string, project: string): Promise<void> {
-    await this.moleculeIdInput.fill(moleculeId);
-    await this.projectInput.fill(project);
+  async triggerProcessException(step: string): Promise<void> {
+    await this.page.locator(`[data-testid="trigger-exception-${step}"]`).click();
   }
 
-  async captureException(stepName: string): Promise<void> {
-    await this.page.locator(`[data-testid="exception-step-${stepName}"]`).click();
+  async triggerCriticalFailure(step: string): Promise<void> {
+    await this.page.locator(`[data-testid="trigger-critical-failure-${step}"]`).click();
   }
 
-  async triggerRetryPolicy(): Promise<void> {
-    await this.page.locator('[data-testid="retry-policy-trigger"]').click();
-  }
-
-  async stopProcessing(): Promise<void> {
-    await this.page.locator('[data-testid="stop-processing"]').click();
+  async triggerRetryPolicy(step: string): Promise<void> {
+    await this.page.locator(`[data-testid="trigger-retry-${step}"]`).click();
   }
 
   // Assertions
-  async expectErrorNotification(): Promise<void> {
-    await expect(this.errorNotification).toBeVisible({ timeout: 10000 });
+  async expectErrorNotificationEmailContains(content: string): Promise<void> {
+    await expect(this.errorNotificationEmail).toContainText(content, { timeout: 10000 });
   }
 
-  async expectStopNotification(): Promise<void> {
-    await expect(this.stopNotification).toBeVisible({ timeout: 10000 });
+  async expectLogEntryContains(content: string): Promise<void> {
+    await expect(this.logEntry).toContainText(content, { timeout: 10000 });
   }
 
-  async expectRetryPolicyLog(): Promise<void> {
-    await expect(this.retryPolicyLog).toBeVisible({ timeout: 10000 });
+  async expectProcessExceptionAlertVisible(): Promise<void> {
+    await expect(this.processExceptionAlert).toBeVisible({ timeout: 10000 });
   }
 
-  async expectExceptionLogEntry(): Promise<void> {
-    await expect(this.exceptionLogEntry).toBeVisible({ timeout: 10000 });
+  async expectErrorMessage(message: string): Promise<void> {
+    await expect(this.page.locator('[data-testid="error-message"]')).toHaveText(message, { timeout: 10000 });
   }
 }

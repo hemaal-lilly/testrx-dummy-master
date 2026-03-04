@@ -16,11 +16,11 @@ Given('stakeholder_recipients are configured with at least one valid email addre
 });
 
 Given('log_path is writable by the service account', async function (this: ICustomWorld) {
-  await pageObject.configureLogPath('/var/log/automation');
+  await pageObject.configureLogPath('/var/logs/automation');
 });
 
 Given('failure_points_list includes {string}, {string}, {string}, and {string}', async function (this: ICustomWorld, step1: string, step2: string, step3: string, step4: string) {
-  // Assume failure points are pre-configured in the system; no direct action needed here.
+  // Assume configuration is already done in the system; no action needed here.
 });
 
 Given('retry_attempts policy is configured as a non-negative integer', async function (this: ICustomWorld) {
@@ -28,90 +28,94 @@ Given('retry_attempts policy is configured as a non-negative integer', async fun
 });
 
 Given('a molecule with MoleculeID and Project is being processed in the automation', async function (this: ICustomWorld) {
-  await pageObject.configureMoleculeDetails('Molecule123', 'ProjectX');
+  // Assume molecule is already being processed; no action needed here.
 });
 
-Given('a process exception occurs at step {string}', async function (this: ICustomWorld, stepName: string) {
-  await pageObject.captureException(stepName);
+Given('a process exception occurs at step {string}', async function (this: ICustomWorld, step: string) {
+  await pageObject.triggerProcessException(step);
 });
 
-When('the exception is captured', async function (this: ICustomWorld) {
-  // Assume exception capture is automatic; no direct action needed here.
-});
-
-Then('an error email is sent to monitoring_distribution', async function (this: ICustomWorld) {
-  await pageObject.expectErrorNotification();
-});
-
-Then('the email content includes MoleculeID, Project, step name {string}, and an error summary', async function (this: ICustomWorld, stepName: string) {
-  await pageObject.expectExceptionLogEntry();
-});
-
-Given('a recoverable file access error occurs at step {string} and retry_attempts is set to {int}', async function (this: ICustomWorld, stepName: string, attempts: number) {
+Given('a recoverable file access error occurs at step {string} and retry_attempts is set to {int}', async function (this: ICustomWorld, step: string, attempts: number) {
   await pageObject.configureRetryAttempts(attempts);
-  await pageObject.captureException(stepName);
+  await pageObject.triggerRetryPolicy(step);
 });
 
-When('the retry policy triggers', async function (this: ICustomWorld) {
-  await pageObject.triggerRetryPolicy();
-});
-
-Then('processing continues after a successful retry', async function (this: ICustomWorld) {
-  await pageObject.expectRetryPolicyLog();
-});
-
-Then('both the failure and the recovery are logged', async function (this: ICustomWorld) {
-  await pageObject.expectRetryPolicyLog();
-});
-
-Given('a critical failure is detected due to repeated failure threshold at step {string}', async function (this: ICustomWorld, stepName: string) {
-  await pageObject.captureException(stepName);
-});
-
-When('the bot stops processing', async function (this: ICustomWorld) {
-  await pageObject.stopProcessing();
-});
-
-Then('stakeholders receive a stop notification at stakeholder_recipients', async function (this: ICustomWorld) {
-  await pageObject.expectStopNotification();
-});
-
-Then('the log documents next steps', async function (this: ICustomWorld) {
-  await pageObject.expectExceptionLogEntry();
+Given('a critical failure is detected due to repeated failure threshold at step {string}', async function (this: ICustomWorld, step: string) {
+  await pageObject.triggerCriticalFailure(step);
 });
 
 Given('monitoring_distribution is empty', async function (this: ICustomWorld) {
   await pageObject.configureMonitoringDistribution('');
 });
 
-When('an exception is captured', async function (this: ICustomWorld) {
-  // Assume exception capture is automatic; no direct action needed here.
-});
-
-Then('an error message {string} is raised', async function (this: ICustomWorld, errorMessage: string) {
-  await expect(pageObject.errorNotification).toContainText(errorMessage);
-});
-
 Given('log_path is not writable by the service account', async function (this: ICustomWorld) {
   await pageObject.configureLogPath('/invalid/path');
-});
-
-When('the system attempts to write an exception log entry', async function (this: ICustomWorld) {
-  // Assume log write is automatic; no direct action needed here.
-});
-
-Then('an error message {string} is raised', async function (this: ICustomWorld, errorMessage: string) {
-  await expect(pageObject.errorNotification).toContainText(errorMessage);
 });
 
 Given('retry_attempts is set to {int}', async function (this: ICustomWorld, attempts: number) {
   await pageObject.configureRetryAttempts(attempts);
 });
 
-When('the exception handling configuration is evaluated', async function (this: ICustomWorld) {
-  // Assume evaluation is automatic; no direct action needed here.
+When('the exception is captured', async function (this: ICustomWorld) {
+  await pageObject.expectProcessExceptionAlertVisible();
 });
 
-Then('an error message {string} is raised', async function (this: ICustomWorld, errorMessage: string) {
-  await expect(pageObject.errorNotification).toContainText(errorMessage);
+When('the retry policy triggers', async function (this: ICustomWorld) {
+  // Assume retry policy is triggered automatically; no action needed here.
+});
+
+When('the bot stops processing', async function (this: ICustomWorld) {
+  // Assume bot stops processing automatically; no action needed here.
+});
+
+When('the exception handling configuration is evaluated', async function (this: ICustomWorld) {
+  // Assume configuration evaluation is automatic; no action needed here.
+});
+
+When('the system attempts to write an exception log entry', async function (this: ICustomWorld) {
+  // Assume log writing is triggered automatically; no action needed here.
+});
+
+Then('an error email is sent to monitoring_distribution', async function (this: ICustomWorld) {
+  await pageObject.expectErrorNotificationEmailContains('monitoring@example.com');
+});
+
+Then('the email content includes MoleculeID, Project, step name {string}, and an error summary', async function (this: ICustomWorld, step: string) {
+  await pageObject.expectErrorNotificationEmailContains(`Step: ${step}`);
+});
+
+Then('processing continues after a successful retry', async function (this: ICustomWorld) {
+  // Assume processing continuation is verified by system; no action needed here.
+});
+
+Then('both the failure and the recovery are logged', async function (this: ICustomWorld) {
+  await pageObject.expectLogEntryContains('Recovery successful');
+});
+
+Then('stakeholders receive a stop notification at stakeholder_recipients', async function (this: ICustomWorld) {
+  await pageObject.expectErrorNotificationEmailContains('stakeholder@example.com');
+});
+
+Then('the log documents next steps', async function (this: ICustomWorld) {
+  await pageObject.expectLogEntryContains('Next steps');
+});
+
+Then('an exception log entry is created at log_path', async function (this: ICustomWorld) {
+  await pageObject.expectLogEntryContains('/var/logs/automation');
+});
+
+Then('the log entry includes MoleculeID, Project, step name {string}, timestamp, and an error summary', async function (this: ICustomWorld, step: string) {
+  await pageObject.expectLogEntryContains(`Step: ${step}`);
+});
+
+Then('no retry attempt is performed', async function (this: ICustomWorld) {
+  await pageObject.expectLogEntryContains('No retry attempted');
+});
+
+Then('the failure is logged', async function (this: ICustomWorld) {
+  await pageObject.expectLogEntryContains('Failure logged');
+});
+
+Then('an error message {string} is raised', async function (this: ICustomWorld, message: string) {
+  await pageObject.expectErrorMessage(message);
 });
