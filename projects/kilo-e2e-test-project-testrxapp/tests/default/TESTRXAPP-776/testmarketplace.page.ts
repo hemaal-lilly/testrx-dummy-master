@@ -38,7 +38,10 @@ export class TestMarketplacePage {
   }
 
   async hardReloadPage(): Promise<void> {
-    await this.page.reload({ waitUntil: 'networkidle', bypassCache: true });
+    // Navigate to current URL with cache-busting query parameter
+    const url = new URL(this.page.url());
+    url.searchParams.set('_cb', Date.now().toString());
+    await this.page.goto(url.toString(), { waitUntil: 'networkidle' });
   }
 
   async resizeBrowser(width: number, height: number): Promise<void> {
