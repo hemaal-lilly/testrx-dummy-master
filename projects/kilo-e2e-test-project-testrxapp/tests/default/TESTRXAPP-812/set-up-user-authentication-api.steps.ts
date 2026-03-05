@@ -8,40 +8,38 @@ let apiPage: SetUpUserAuthenticationApiPage;
 
 Given(
   'I send a POST request to {string} with JSON body:',
-  async function (this: ICustomWorld, endpoint: string, bodyTable: any) {
-    const body = bodyTable.rowsHash();
-    apiPage = new SetUpUserAuthenticationApiPage(this.request!);
-    this.response = await apiPage.postRequest(endpoint, body);
+  async function (this: ICustomWorld, endpoint: string, body: any) {
+    apiPage = new SetUpUserAuthenticationApiPage(this.request);
+    this.response = await apiPage.sendPostRequest(endpoint, JSON.parse(body));
   }
 );
 
 Given(
-  'I send a GET request to {string} with Authorization header:',
-  async function (this: ICustomWorld, endpoint: string, headerTable: any) {
-    const headers = headerTable.rowsHash();
-    apiPage = new SetUpUserAuthenticationApiPage(this.request!);
-    this.response = await apiPage.getRequest(endpoint, headers);
-  }
-);
-
-Given(
-  'I send a GET request to {string} without Authorization header',
-  async function (this: ICustomWorld, endpoint: string) {
-    apiPage = new SetUpUserAuthenticationApiPage(this.request!);
-    this.response = await apiPage.getRequest(endpoint);
-  }
-);
-
-Then(
-  'I should receive a {int} status code and a {string}',
-  async function (this: ICustomWorld, expectedStatus: number, expectedMessage: string) {
-    await apiPage.validateResponse(this.response!, expectedStatus, expectedMessage);
+  'I send a GET request to the secured endpoint without an Authorization header',
+  async function (this: ICustomWorld) {
+    apiPage = new SetUpUserAuthenticationApiPage(this.request);
+    this.response = await apiPage.sendGetRequest('/secured-endpoint');
   }
 );
 
 Then(
   'I should receive a {int} status code',
   async function (this: ICustomWorld, expectedStatus: number) {
-    await apiPage.validateResponse(this.response!, expectedStatus);
+    await apiPage.expectStatusCode(this.response, expectedStatus);
+  }
+);
+
+Then(
+  'the response should contain a {string} message',
+  async function (this: ICustomWorld, key: string) {
+    const responseBody = await this.response.json();
+    expect(responseBody.message).toBe(key);
+  }
+);
+
+Then(
+  'the response should contain a valid JWT token',
+  async function (this: ICustomWorld) {
+    await apiPage.expectJwtToken(this.response);
   }
 );
