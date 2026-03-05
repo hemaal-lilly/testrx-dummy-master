@@ -21,8 +21,8 @@ export class TestMarketplaceRajeevPage {
     return this.page.locator('[data-testid="login-button"]');
   }
 
-  get navigationBar(): Locator {
-    return this.page.locator('[data-testid="navigation-bar"]');
+  get headerNavigation(): Locator {
+    return this.page.locator('[data-testid="header-navigation"]');
   }
 
   get errorMessage(): Locator {
@@ -30,7 +30,7 @@ export class TestMarketplaceRajeevPage {
   }
 
   // Actions
-  async navigateTo(url: string): Promise<void> {
+  async navigateToLoginPage(url: string): Promise<void> {
     await this.page.goto(url);
     await this.page.waitForLoadState('networkidle');
   }
@@ -43,21 +43,17 @@ export class TestMarketplaceRajeevPage {
     await this.passwordInput.fill(password);
   }
 
-  async clickLogin(): Promise<void> {
+  async clickLoginButton(): Promise<void> {
     await this.loginButton.click();
     await this.page.waitForLoadState('networkidle');
   }
 
   // Assertions
-  async expectNavigationBarVisible(): Promise<void> {
-    await expect(this.navigationBar).toBeVisible();
+  async expectHeaderNavigationVisible(): Promise<void> {
+    await expect(this.headerNavigation).toBeVisible();
   }
 
   async expectErrorMessageVisible(): Promise<void> {
     await expect(this.errorMessage).toBeVisible();
-  }
-
-  async expectPageHeaderVisible(): Promise<void> {
-    await expect(this.navigationBar).toBeVisible();
   }
 }
