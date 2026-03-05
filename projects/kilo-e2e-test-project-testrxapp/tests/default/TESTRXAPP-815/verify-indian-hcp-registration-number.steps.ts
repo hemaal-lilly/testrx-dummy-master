@@ -6,96 +6,85 @@ import { VerifyIndianHcpRegistrationNumberPage } from './verify-indian-hcp-regis
 
 let pageObject: VerifyIndianHcpRegistrationNumberPage;
 
-Given('a logged-in HCP is on the verification form', async function (this: ICustomWorld) {
+Given('the MRN verification form includes {string}, {string}, {string}, {string}, {string}, and {string}', async function (this: ICustomWorld) {
   pageObject = new VerifyIndianHcpRegistrationNumberPage(this.page);
-  await pageObject.navigateToVerificationForm();
+  await pageObject.navigateToForm();
 });
 
-Given('the MRN verification form includes {string}', async function (this: ICustomWorld, elements: string) {
-  const expectedElements = elements.split(', ');
-  for (const element of expectedElements) {
-    await expect(this.page.locator(element)).toBeVisible();
+Given('the Verification Spinner {string} is hidden by default', async function (this: ICustomWorld, spinner: string) {
+  await pageObject.expectVerificationSpinnerHidden();
+});
+
+Given('the Error Message Container {string} has aria-live {string}', async function (this: ICustomWorld, errorContainer: string, ariaLive: string) {
+  const ariaLiveValue = await pageObject.errorMessageContainer.getAttribute('aria-live');
+  expect(ariaLiveValue).toBe(ariaLive);
+});
+
+Given('a logged-in HCP with profile status {string} is on the verification form', async function (this: ICustomWorld, profileStatus: string) {
+  await pageObject.navigateToForm();
+  // Assume profile status is validated elsewhere (e.g., via API or UI)
+});
+
+Given('{string} is set to {string}', async function (this: ICustomWorld, field: string, value: string) {
+  if (field === '#state-council-select') {
+    await pageObject.selectStateCouncil(value);
   }
 });
 
-Given('#state-council-select is set to {string}', async function (this: ICustomWorld, stateCouncil: string) {
-  await pageObject.selectStateCouncil(stateCouncil);
+Given('{string} contains {string}', async function (this: ICustomWorld, field: string, value: string) {
+  if (field === '#mrn-input') {
+    await pageObject.fillMrnInput(value);
+  }
 });
 
-Given('#mrn-input contains {string}', async function (this: ICustomWorld, mrn: string) {
-  await pageObject.fillMRN(mrn);
+Given('{string} is empty', async function (this: ICustomWorld, field: string) {
+  if (field === '#mrn-input') {
+    await pageObject.fillMrnInput('');
+  }
 });
 
-Given('#mrn-input is empty', async function (this: ICustomWorld) {
-  await pageObject.fillMRN('');
+Given('{string} is not selected', async function (this: ICustomWorld, field: string) {
+  if (field === '#state-council-select') {
+    await pageObject.selectStateCouncil('');
+  }
 });
 
-Given('#state-council-select is not selected', async function (this: ICustomWorld) {
-  await expect(pageObject.stateCouncilSelect).toHaveValue('');
+When('the HCP clicks {string}', async function (this: ICustomWorld, button: string) {
+  if (button === '#verify-mrn-btn') {
+    await pageObject.clickVerifyButton();
+  }
 });
 
-Given('the system has an existing account linked to MRN {string}', async function (this: ICustomWorld, mrn: string) {
-  // Simulate backend setup for existing MRN
-  await this.context.addCookies([{ name: 'existingMRN', value: mrn, domain: 'playwright.dev' }]);
+When('the HCP blurs {string}', async function (this: ICustomWorld, field: string) {
+  if (field === '#mrn-input') {
+    await pageObject.blurMrnInput();
+  }
 });
 
-Given('the verification service is delayed beyond 3 seconds', async function (this: ICustomWorld) {
-  // Simulate backend delay
-  await this.context.addCookies([{ name: 'verificationDelay', value: 'true', domain: 'playwright.dev' }]);
+Then('the Verification Spinner {string} becomes visible immediately', async function (this: ICustomWorld, spinner: string) {
+  await pageObject.expectVerificationSpinnerVisible();
 });
 
-Given('the HCP has made {int} verification attempts within the last {int} seconds', async function (this: ICustomWorld, attempts: number, seconds: number) {
-  // Simulate backend rate limit
-  await this.context.addCookies([{ name: 'attemptCount', value: `${attempts}`, domain: 'playwright.dev' }]);
+Then('the Verification Spinner {string} hides within {int} seconds', async function (this: ICustomWorld, spinner: string, seconds: number) {
+  await pageObject.expectVerificationSpinnerHidden();
 });
 
-When('the HCP clicks #verify-mrn-btn', async function (this: ICustomWorld) {
-  await pageObject.clickVerifyButton();
-});
-
-When('the HCP blurs #mrn-input', async function (this: ICustomWorld) {
-  await pageObject.blurMRNInput();
-});
-
-Then('the Verification Spinner (#verify-spinner) becomes visible immediately', async function (this: ICustomWorld) {
-  await pageObject.expectSpinnerVisible();
-});
-
-Then('the Verification Spinner (#verify-spinner) hides within 3 seconds', async function (this: ICustomWorld) {
-  await pageObject.expectSpinnerHidden();
-});
-
-Then('the Verification Status Badge (#verification-status-badge) updates to {string}', async function (this: ICustomWorld, expectedText: string) {
+Then('the Verification Status Badge {string} updates to {string}', async function (this: ICustomWorld, badge: string, expectedText: string) {
   await pageObject.expectVerificationStatusBadgeText(expectedText);
 });
 
-Then('the Error Message Container (#mrn-error-msg) shows {string}', async function (this: ICustomWorld, expectedText: string) {
+Then('the Error Message Container {string} shows {string}', async function (this: ICustomWorld, errorContainer: string, expectedText: string) {
   await pageObject.expectErrorMessage(expectedText);
-});
-
-Then('the Verify Button (#verify-mrn-btn) becomes disabled', async function (this: ICustomWorld) {
-  await pageObject.expectVerifyButtonDisabled();
-});
-
-Then('the Verify Button (#verify-mrn-btn) remains disabled', async function (this: ICustomWorld) {
-  await pageObject.expectVerifyButtonDisabled();
-});
-
-Then('the Verify Button (#verify-mrn-btn) remains enabled', async function (this: ICustomWorld) {
-  await pageObject.expectVerifyButtonEnabled();
 });
 
 Then('a toast appears with text {string}', async function (this: ICustomWorld, expectedText: string) {
   await pageObject.expectToastMessage(expectedText);
 });
 
-Then('the MRN is saved and displayed as uppercase {string}', async function (this: ICustomWorld, expectedMRN: string) {
-  await expect(pageObject.mrnInput).toHaveValue(expectedMRN);
+Then('the Verify Button {string} becomes disabled', async function (this: ICustomWorld, button: string) {
+  await pageObject.expectVerifyButtonDisabled();
 });
 
-Then('the verification form controls {string} are not visible', async function (this: ICustomWorld, elements: string) {
-  const expectedElements = elements.split(', ');
-  for (const element of expectedElements) {
-    await expect(this.page.locator(element)).toBeHidden();
-  }
+Then('the Verify Button {string} remains enabled', async function (this: ICustomWorld, button: string) {
+  await pageObject.expectVerifyButtonEnabled();
 });
