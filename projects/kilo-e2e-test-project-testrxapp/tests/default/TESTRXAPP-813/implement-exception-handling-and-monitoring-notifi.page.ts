@@ -12,65 +12,56 @@ export class ImplementExceptionHandlingAndMonitoringNotificationsPage {
   }
 
   // Locators (getter-based for lazy evaluation)
-  get monitoringDistributionInput() { return this.page.locator('[data-testid="monitoring-distribution"]'); }
-  get stakeholderRecipientsInput() { return this.page.locator('[data-testid="stakeholder-recipients"]'); }
-  get logPathInput() { return this.page.locator('[data-testid="log-path"]'); }
-  get retryAttemptsInput() { return this.page.locator('[data-testid="retry-attempts"]'); }
-  get moleculeIdInput() { return this.page.locator('[data-testid="molecule-id"]'); }
-  get projectInput() { return this.page.locator('[data-testid="project"]'); }
-  get exceptionLogEntry() { return this.page.locator('[data-testid="exception-log-entry"]'); }
+  get monitoringDistribution() { return this.page.locator('[data-testid="monitoring-distribution"]'); }
+  get stakeholderRecipients() { return this.page.locator('[data-testid="stakeholder-recipients"]'); }
+  get logPath() { return this.page.locator('[data-testid="log-path"]'); }
+  get retryAttempts() { return this.page.locator('[data-testid="retry-attempts"]'); }
+  get moleculeDetails() { return this.page.locator('[data-testid="molecule-details"]'); }
   get errorNotification() { return this.page.locator('[data-testid="error-notification"]'); }
-  get stopNotification() { return this.page.locator('[data-testid="stop-notification"]'); }
-  get retryPolicyLog() { return this.page.locator('[data-testid="retry-policy-log"]'); }
+  get exceptionLogEntry() { return this.page.locator('[data-testid="exception-log-entry"]'); }
 
   // Actions
   async configureMonitoringDistribution(email: string): Promise<void> {
-    await this.monitoringDistributionInput.fill(email);
+    await this.monitoringDistribution.fill(email);
+    await expect(this.monitoringDistribution).toHaveValue(email);
   }
 
   async configureStakeholderRecipients(email: string): Promise<void> {
-    await this.stakeholderRecipientsInput.fill(email);
+    await this.stakeholderRecipients.fill(email);
+    await expect(this.stakeholderRecipients).toHaveValue(email);
   }
 
   async configureLogPath(path: string): Promise<void> {
-    await this.logPathInput.fill(path);
+    await this.logPath.fill(path);
+    await expect(this.logPath).toHaveValue(path);
   }
 
   async configureRetryAttempts(attempts: number): Promise<void> {
-    await this.retryAttemptsInput.fill(attempts.toString());
+    await this.retryAttempts.fill(attempts.toString());
+    await expect(this.retryAttempts).toHaveValue(attempts.toString());
   }
 
-  async configureMoleculeDetails(moleculeId: string, project: string): Promise<void> {
-    await this.moleculeIdInput.fill(moleculeId);
-    await this.projectInput.fill(project);
+  async processMolecule(moleculeID: string, project: string): Promise<void> {
+    await this.moleculeDetails.fill(`${moleculeID},${project}`);
+    await expect(this.moleculeDetails).toHaveValue(`${moleculeID},${project}`);
   }
 
   async captureException(stepName: string): Promise<void> {
-    await this.page.locator(`[data-testid="exception-step-${stepName}"]`).click();
+    await this.page.locator(`[data-testid="exception-${stepName}"]`).click();
+    await expect(this.errorNotification).toBeVisible();
   }
 
   async triggerRetryPolicy(): Promise<void> {
     await this.page.locator('[data-testid="retry-policy-trigger"]').click();
+    await expect(this.page.locator('[data-testid="retry-success"]')).toBeVisible();
   }
 
   async stopProcessing(): Promise<void> {
     await this.page.locator('[data-testid="stop-processing"]').click();
+    await expect(this.page.locator('[data-testid="stop-notification"]')).toBeVisible();
   }
 
-  // Assertions
-  async expectErrorNotification(): Promise<void> {
-    await expect(this.errorNotification).toBeVisible({ timeout: 10000 });
-  }
-
-  async expectStopNotification(): Promise<void> {
-    await expect(this.stopNotification).toBeVisible({ timeout: 10000 });
-  }
-
-  async expectRetryPolicyLog(): Promise<void> {
-    await expect(this.retryPolicyLog).toBeVisible({ timeout: 10000 });
-  }
-
-  async expectExceptionLogEntry(): Promise<void> {
-    await expect(this.exceptionLogEntry).toBeVisible({ timeout: 10000 });
+  async validateLogEntry(): Promise<void> {
+    await expect(this.exceptionLogEntry).toBeVisible();
   }
 }
