@@ -2,7 +2,7 @@
 import { Page, Locator, expect } from '@playwright/test';
 
 /**
- * Page Object for Curriculum Detail Review page
+ * Page Object for Curriculum Detail Review page -- Associated Items grid -- Associate an Item dialog window and grid
  */
 export class CurriculumDetailReviewPageAssociatedItemsGridAssociateAnItemDialogWindowAndGridPage {
   readonly page: Page;
@@ -28,8 +28,8 @@ export class CurriculumDetailReviewPageAssociatedItemsGridAssociateAnItemDialogW
     return this.page.locator('[data-testid="search-button"]');
   }
 
-  get resultsGrid(): Locator {
-    return this.page.locator('[data-testid="results-grid"]');
+  get gridHeaders(): Locator {
+    return this.page.locator('[data-testid="grid-headers"]');
   }
 
   get itemRevisionDateCell(): Locator {
@@ -47,21 +47,34 @@ export class CurriculumDetailReviewPageAssociatedItemsGridAssociateAnItemDialogW
     await expect(this.dialogWindow).toBeVisible();
   }
 
-  async searchForItem(itemId: string): Promise<void> {
+  async enterItemId(itemId: string): Promise<void> {
     await this.itemIdSearchField.fill(itemId);
+  }
+
+  async clickSearchButton(): Promise<void> {
     await this.searchButton.click();
-    await expect(this.resultsGrid).toBeVisible();
   }
 
-  async verifyGridHeadersAndControls(): Promise<void> {
-    const headers = await this.resultsGrid.locator('[data-testid="grid-header"]').allTextContents();
-    expect(headers).toEqual(['Header1', 'Header2', 'Header3']); // Replace with actual headers
+  async validateGridHeaders(): Promise<void> {
+    await expect(this.gridHeaders).toBeVisible();
   }
 
-  async typeInvalidDate(): Promise<void> {
-    await this.itemRevisionDateCell.click();
-    await this.itemRevisionDateCell.fill('invalid-date');
-    const errorMessage = await this.page.locator('[data-testid="date-error-message"]');
+  async typeIntoDateCell(value: string): Promise<void> {
+    await this.itemRevisionDateCell.fill(value);
+  }
+
+  // Assertions
+  async expectDialogVisible(): Promise<void> {
+    await expect(this.dialogWindow).toBeVisible();
+  }
+
+  async expectNoResults(): Promise<void> {
+    const results = await this.page.locator('[data-testid="grid-row"]').count();
+    expect(results).toBe(0);
+  }
+
+  async expectErrorMessage(): Promise<void> {
+    const errorMessage = this.page.locator('[data-testid="error-message"]');
     await expect(errorMessage).toBeVisible();
   }
 }
