@@ -2,7 +2,7 @@
 import { Page, Locator, expect } from '@playwright/test';
 
 /**
- * Page Object for Enterprise Automation homepage.
+ * Page Object for Enterprise Automation Homepage
  */
 export class TestMarketplaceShankarPage {
   readonly page: Page;
@@ -13,82 +13,43 @@ export class TestMarketplaceShankarPage {
 
   // Locators (getter-based for lazy evaluation)
   get lillyLogo() { return this.page.locator('[data-testid="lilly-logo"]'); }
-  get headerTitle() { return this.page.locator('[data-testid="header-title"]'); }
+  get headerTitle() { return this.page.locator('header h1'); }
   get headerSection() { return this.page.locator('[data-testid="header-section"]'); }
   get heroBanner() { return this.page.locator('[data-testid="hero-banner"]'); }
   get cardsSection() { return this.page.locator('[data-testid="cards-section"]'); }
-  get topHeader() { return this.page.locator('[data-testid="top-header"]'); }
-  get ctaButton() { return this.page.locator('[data-testid="cta-submit-idea"]'); }
+  get topHeaderNavItem() { return (item: string) => this.page.locator(`[data-testid="nav-item-${item.toLowerCase().replace(/\s+/g, '-')}"`); }
+  get ctaButton() { return (text: string) => this.page.locator(`button:has-text("${text}")`); }
   get homeTab() { return this.page.locator('[data-testid="home-tab"]'); }
 
   // Actions
-  /**
-   * Navigate to the homepage.
-   * @param url - The URL to navigate to.
-   */
-  async navigate(url: string): Promise<void> {
+  async navigateTo(url: string): Promise<void> {
     await this.page.goto(url);
     await this.page.waitForLoadState('networkidle');
   }
 
   // Assertions
-  /**
-   * Assert that the Lilly logo is visible.
-   */
-  async assertLillyLogoVisible(): Promise<void> {
-    await expect(this.lillyLogo).toBeVisible({ timeout: 5000 });
+  async assertElementVisible(locator: Locator): Promise<void> {
+    await expect(locator).toBeVisible({ timeout: 5000 });
   }
 
-  /**
-   * Assert that the Lilly logo is not visible.
-   */
-  async assertLillyLogoNotVisible(): Promise<void> {
-    await expect(this.lillyLogo).toBeHidden({ timeout: 5000 });
+  async assertElementNotVisible(locator: Locator): Promise<void> {
+    await expect(locator).toBeHidden({ timeout: 5000 });
   }
 
-  /**
-   * Assert that the header title matches the expected text.
-   * @param title - The expected title text.
-   */
-  async assertHeaderTitleVisible(title: string): Promise<void> {
-    await expect(this.headerTitle).toHaveText(title, { timeout: 5000 });
+  async assertNavItemVisible(item: string): Promise<void> {
+    const locator = this.topHeaderNavItem(item);
+    await expect(locator).toBeVisible({ timeout: 5000 });
   }
 
-  /**
-   * Assert that a navigation item is visible in the top header.
-   * @param itemText - The text of the navigation item.
-   */
-  async assertNavigationItemVisible(itemText: string): Promise<void> {
-    await expect(this.topHeader.locator(`text=${itemText}`)).toBeVisible({ timeout: 5000 });
+  async assertNavItemNotVisible(item: string): Promise<void> {
+    const locator = this.topHeaderNavItem(item);
+    await expect(locator).toBeHidden({ timeout: 5000 });
   }
 
-  /**
-   * Assert that a navigation item is not visible in the top header.
-   * @param itemText - The text of the navigation item.
-   */
-  async assertNavigationItemNotVisible(itemText: string): Promise<void> {
-    await expect(this.topHeader.locator(`text=${itemText}`)).toBeHidden({ timeout: 5000 });
-  }
-
-  /**
-   * Assert that the CTA button is visible.
-   * @param buttonText - The expected button text.
-   */
-  async assertCTAButtonVisible(buttonText: string): Promise<void> {
-    await expect(this.ctaButton).toHaveText(buttonText, { timeout: 5000 });
-    await expect(this.ctaButton).toBeVisible();
-  }
-
-  /**
-   * Assert that the "Home" tab is active.
-   */
   async assertHomeTabActive(): Promise<void> {
     await expect(this.homeTab).toHaveAttribute('aria-selected', 'true', { timeout: 5000 });
   }
 
-  /**
-   * Assert that the "Home" tab is not active.
-   */
   async assertHomeTabNotActive(): Promise<void> {
     await expect(this.homeTab).not.toHaveAttribute('aria-selected', 'true', { timeout: 5000 });
   }

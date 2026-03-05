@@ -1,6 +1,9 @@
 // Page Object: VerifyIndianHcpRegistrationNumberPage
 import { Page, Locator, expect } from '@playwright/test';
 
+/**
+ * Page Object for Indian HCP Medical Registration Number Verification Form
+ */
 export class VerifyIndianHcpRegistrationNumberPage {
   readonly page: Page;
 
@@ -9,16 +12,36 @@ export class VerifyIndianHcpRegistrationNumberPage {
   }
 
   // Locators (getter-based for lazy evaluation)
-  get stateCouncilSelect() { return this.page.locator('#state-council-select'); }
-  get mrnInput() { return this.page.locator('#mrn-input'); }
-  get verifyButton() { return this.page.locator('#verify-mrn-btn'); }
-  get errorMessageContainer() { return this.page.locator('#mrn-error-msg'); }
-  get verificationStatusBadge() { return this.page.locator('#verification-status-badge'); }
-  get verificationSpinner() { return this.page.locator('#verify-spinner'); }
-  get toastMessage() { return this.page.locator('[data-testid="toast-message"]'); }
+  get stateCouncilSelect(): Locator {
+    return this.page.locator('[data-testid="state-council-select"]');
+  }
+
+  get mrnInput(): Locator {
+    return this.page.locator('[data-testid="mrn-input"]');
+  }
+
+  get verifyButton(): Locator {
+    return this.page.locator('[data-testid="verify-mrn-btn"]');
+  }
+
+  get errorMessageContainer(): Locator {
+    return this.page.locator('[data-testid="mrn-error-msg"]');
+  }
+
+  get verificationStatusBadge(): Locator {
+    return this.page.locator('[data-testid="verification-status-badge"]');
+  }
+
+  get verificationSpinner(): Locator {
+    return this.page.locator('[data-testid="verify-spinner"]');
+  }
+
+  get toastMessage(): Locator {
+    return this.page.locator('[data-testid="toast-message"]');
+  }
 
   // Actions
-  async navigateToVerificationForm(): Promise<void> {
+  async navigateToForm(): Promise<void> {
     await this.page.goto('/hcp-verification-form');
     await this.page.waitForLoadState('networkidle');
   }
@@ -27,11 +50,11 @@ export class VerifyIndianHcpRegistrationNumberPage {
     await this.stateCouncilSelect.selectOption({ label: stateCouncil });
   }
 
-  async fillMRN(mrn: string): Promise<void> {
+  async fillMrnInput(mrn: string): Promise<void> {
     await this.mrnInput.fill(mrn);
   }
 
-  async blurMRNInput(): Promise<void> {
+  async blurMrnInput(): Promise<void> {
     await this.mrnInput.blur();
   }
 
@@ -40,11 +63,11 @@ export class VerifyIndianHcpRegistrationNumberPage {
   }
 
   // Assertions
-  async expectSpinnerVisible(): Promise<void> {
+  async expectVerificationSpinnerVisible(): Promise<void> {
     await expect(this.verificationSpinner).toBeVisible();
   }
 
-  async expectSpinnerHidden(): Promise<void> {
+  async expectVerificationSpinnerHidden(): Promise<void> {
     await expect(this.verificationSpinner).toBeHidden();
   }
 

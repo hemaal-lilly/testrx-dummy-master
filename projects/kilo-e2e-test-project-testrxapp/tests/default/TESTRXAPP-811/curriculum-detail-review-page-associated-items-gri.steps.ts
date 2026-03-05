@@ -16,39 +16,45 @@ When('I click the "Associate an Item" button', async function () {
 });
 
 Then('I should see the Associate an Item dialog window', async function () {
-  await expect(pageObject.dialogWindow).toBeVisible();
+  await pageObject.expectDialogVisible();
 });
 
 When('I enter a valid Item ID into the search field', async function () {
-  await pageObject.searchForItem('valid-item-id'); // Replace with actual valid Item ID
-});
-
-Then('I should see the search results grid populated with matching items', async function () {
-  await expect(pageObject.resultsGrid).toBeVisible();
+  await pageObject.enterItemId('VALID_ITEM_ID');
 });
 
 When('I enter a non-matching Item ID into the search field', async function () {
-  await pageObject.searchForItem('non-matching-item-id'); // Replace with actual non-matching Item ID
+  await pageObject.enterItemId('INVALID_ITEM_ID');
 });
 
-Then('I should see an empty search results grid', async function () {
-  const rows = await pageObject.resultsGrid.locator('[data-testid="grid-row"]').count();
-  expect(rows).toBe(0);
+When('I leave the Item ID field empty', async function () {
+  await pageObject.enterItemId('');
 });
 
-Then('I should see the correct column headers and cell controls in the search results grid', async function () {
-  await pageObject.verifyGridHeadersAndControls();
+When('I click the Search button', async function () {
+  await pageObject.clickSearchButton();
+});
+
+Then('I should see the search results grid populated', async function () {
+  await pageObject.validateGridHeaders();
+});
+
+Then('I should see no results in the search grid', async function () {
+  await pageObject.expectNoResults();
+});
+
+Then('I should see an error message indicating the field is required', async function () {
+  await pageObject.expectErrorMessage();
 });
 
 When('I click into the Item Revision Date cell', async function () {
   await pageObject.itemRevisionDateCell.click();
 });
 
-When('I type invalid data into the date picker', async function () {
-  await pageObject.typeInvalidDate();
+When('I attempt to type a non-date string into the date input', async function () {
+  await pageObject.typeIntoDateCell('INVALID_DATE');
 });
 
-Then('I should see an error or validation preventing invalid input', async function () {
-  const errorMessage = await pageObject.page.locator('[data-testid="date-error-message"]');
-  await expect(errorMessage).toBeVisible();
+Then('I should see an error message indicating invalid date format', async function () {
+  await pageObject.expectErrorMessage();
 });
