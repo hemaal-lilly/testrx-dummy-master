@@ -2,7 +2,7 @@
  * Auto-generated Playwright test
  * Test: User registration with validation
  * Project: proj_471641bd
- * Generated: 2026-02-18T12:13:33.901Z
+ * Generated: 2026-02-18T12:19:40.945Z
  * 
  * @generated
  */

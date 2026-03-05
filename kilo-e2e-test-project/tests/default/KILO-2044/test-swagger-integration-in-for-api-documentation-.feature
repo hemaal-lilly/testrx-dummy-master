@@ -2,7 +2,7 @@
  * Auto-generated Playwright test
  * Test: Test swagger integration in for API documentation in TestRx Automator
  * Project: proj_471641bd
- * Generated: 2026-02-18T12:13:32.665Z
+ * Generated: 2026-02-18T12:19:43.227Z
  * 
  * @generated
  */
