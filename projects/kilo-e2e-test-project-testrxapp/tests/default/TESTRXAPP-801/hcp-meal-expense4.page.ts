@@ -15,7 +15,7 @@ export class HcpMealExpense4Page {
   get warningMessage() { return this.page.locator('[data-testid="warning-message"]'); }
 
   // Actions
-  async navigateToODM(): Promise<void> {
+  async navigate(): Promise<void> {
     await this.page.goto('/odm');
     await this.page.waitForLoadState('networkidle');
   }
@@ -25,7 +25,7 @@ export class HcpMealExpense4Page {
     expect(productCount).toBe(0);
   }
 
-  async confirmProductListNotEmpty(): Promise<void> {
+  async confirmProductListNonEmpty(): Promise<void> {
     const productCount = await this.productList.locator('li').count();
     expect(productCount).toBeGreaterThan(0);
   }
@@ -46,15 +46,7 @@ export class HcpMealExpense4Page {
   }
 
   async captureWarningMessage(): Promise<string> {
+    await expect(this.warningMessage).toBeVisible();
     return await this.warningMessage.textContent();
-  }
-
-  // Assertions
-  async expectUIAfterProcessing(): Promise<void> {
-    await expect(this.page).toHaveURL(/processing-complete/);
-  }
-
-  async expectPreProcessingState(): Promise<void> {
-    await expect(this.page).toHaveURL(/pre-processing/);
   }
 }
