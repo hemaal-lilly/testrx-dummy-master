@@ -6,14 +6,19 @@ import { OneIndiaHcpPage } from './one-india-hcp.page';
 
 let pageObject: OneIndiaHcpPage;
 
-Given('I trigger ingestion of the {string}', async function (this: ICustomWorld, fileType: string) {
-  // Simulate ingestion logic (mock or API call)
-  console.log(`Triggering ingestion for file type: ${fileType}`);
+Given('I have triggered ingestion of the prepared VEM CSV with missing required fields', async function () {
+  // Simulate ingestion process (e.g., API call or file upload)
+  console.log('Triggered ingestion of VEM CSV with missing required fields');
 });
 
-Given('I log into the Work Order Solution Portal as a CMS team user', async function (this: ICustomWorld) {
-  pageObject = new OneIndiaHcpPage(this.page);
-  await pageObject.navigateToPortal();
+Given('I have triggered ingestion of the VEM CSV with PAN missing', async function () {
+  // Simulate ingestion process
+  console.log('Triggered ingestion of VEM CSV with PAN missing');
+});
+
+Given('I have triggered ingestion of the VEM CSV with preparation time over 3 hours', async function () {
+  // Simulate ingestion process
+  console.log('Triggered ingestion of VEM CSV with preparation time over 3 hours');
 });
 
 When('I open the Work Order Solution Portal', async function (this: ICustomWorld) {
@@ -21,37 +26,33 @@ When('I open the Work Order Solution Portal', async function (this: ICustomWorld
   await pageObject.navigateToPortal();
 });
 
-Then('I search for the Work Order corresponding to the meeting', async function (this: ICustomWorld) {
-  const workOrderId = 'meeting123'; // Replace with dynamic ID if needed
-  await pageObject.searchWorkOrder(workOrderId);
-  await pageObject.expectWorkOrderVisible(workOrderId);
+When('I log into the Work Order Solution Portal as a CMS team user', async function (this: ICustomWorld) {
+  pageObject = new OneIndiaHcpPage(this.page);
+  await pageObject.navigateToPortal();
+  // Simulate login (credentials fetched from environment variables)
+  const username = process.env.TESTRX_CRED_LOGIN_USERNAME || '';
+  const password = process.env.TESTRX_CRED_LOGIN_PASSWORD || '';
+  await this.page.fill('[data-testid="username"]', username);
+  await this.page.fill('[data-testid="password"]', password);
+  await this.page.click('[data-testid="login-button"]');
+  await this.page.waitForLoadState('networkidle');
 });
 
-Then('I open the Work Order associated with the meeting', async function (this: ICustomWorld) {
-  const workOrderId = 'meeting123'; // Replace with dynamic ID if needed
-  await pageObject.searchWorkOrder(workOrderId);
-  await pageObject.expectWorkOrderVisible(workOrderId);
+When('I open the Work Order associated with the meeting', async function () {
+  await pageObject.openWorkOrder();
 });
 
-Then('I enter the PAN details', async function (this: ICustomWorld) {
-  const pan = 'ABCDE1234F'; // Replace with dynamic PAN if needed
-  await pageObject.enterPANDetails(pan);
-});
-
-Then('I save the PAN entry', async function (this: ICustomWorld) {
-  await pageObject.savePANEntry();
-});
-
-Then('I initiate the next steps of Work Order generation', async function (this: ICustomWorld) {
-  console.log('Initiating next steps of Work Order generation...');
-  // Simulate next steps logic (mock or API call)
-});
-
-Then('I manually confirm approvals and preparation time', async function (this: ICustomWorld) {
+When('I should manually confirm the required approvals and proceed with Work Order creation', async function () {
   await pageObject.confirmApprovals();
 });
 
-Then('I proceed with Work Order creation', async function (this: ICustomWorld) {
-  console.log('Proceeding with Work Order creation...');
-  // Simulate Work Order creation logic (mock or API call)
+Then('I should be able to search for the Work Order corresponding to the meeting in the processed file', async function () {
+  await pageObject.searchWorkOrder('meeting-id-123');
+  await pageObject.expectWorkOrderVisible();
+});
+
+Then('I should be able to enter the PAN details and save the entry', async function () {
+  await pageObject.enterPanDetails('ABCDE1234F');
+  await pageObject.savePanDetails();
+  await pageObject.expectPanSaved();
 });
