@@ -1,4 +1,4 @@
-// Step Definitions for: Enterprise Automation homepage UI visibility and state
+// Step Definitions for: Enterprise Automation Homepage UI visibility and state
 import { Given, When, Then } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import { ICustomWorld } from '../../../support/world';
@@ -8,17 +8,17 @@ let pageObject: TestMarketplaceShankarPage;
 
 Given('I open {string}', async function (this: ICustomWorld, url: string) {
   pageObject = new TestMarketplaceShankarPage(this.page);
-  await pageObject.navigate(url);
+  await pageObject.navigateTo(url);
 });
 
 Given('I am on the page', async function (this: ICustomWorld) {
   pageObject = new TestMarketplaceShankarPage(this.page);
-  await pageObject.navigate('https://qa.automate.lilly.com');
+  await pageObject.navigateTo('https://qa.automate.lilly.com');
 });
 
 Given('I am on the home page', async function (this: ICustomWorld) {
   pageObject = new TestMarketplaceShankarPage(this.page);
-  await pageObject.navigate('https://qa.automate.lilly.com');
+  await pageObject.navigateTo('https://qa.automate.lilly.com');
 });
 
 When('the page loads', async function (this: ICustomWorld) {
@@ -26,45 +26,49 @@ When('the page loads', async function (this: ICustomWorld) {
 });
 
 Then('the Lilly logo is visible', async function (this: ICustomWorld) {
-  await pageObject.assertLillyLogoVisible();
+  await pageObject.assertElementVisible(pageObject.lillyLogo);
 });
 
 Then('the Lilly logo is not visible', async function (this: ICustomWorld) {
-  await pageObject.assertLillyLogoNotVisible();
+  await pageObject.assertElementNotVisible(pageObject.lillyLogo);
 });
 
 Then('the header title {string} is visible', async function (this: ICustomWorld, title: string) {
-  await pageObject.assertHeaderTitleVisible(title);
+  await expect(pageObject.headerTitle).toHaveText(title, { timeout: 5000 });
 });
 
 Then('the header section is visible', async function (this: ICustomWorld) {
-  await expect(pageObject.headerSection).toBeVisible({ timeout: 5000 });
+  await pageObject.assertElementVisible(pageObject.headerSection);
 });
 
 Then('the hero banner is visible', async function (this: ICustomWorld) {
-  await expect(pageObject.heroBanner).toBeVisible({ timeout: 5000 });
+  await pageObject.assertElementVisible(pageObject.heroBanner);
 });
 
 Then('the cards section is visible', async function (this: ICustomWorld) {
-  await expect(pageObject.cardsSection).toBeVisible({ timeout: 5000 });
+  await pageObject.assertElementVisible(pageObject.cardsSection);
 });
 
-Then('the top header shows {string}', async function (this: ICustomWorld, itemText: string) {
-  await pageObject.assertNavigationItemVisible(itemText);
+Then('the top header shows {string}', async function (this: ICustomWorld, item: string) {
+  await pageObject.assertNavItemVisible(item);
 });
 
-Then('the top header does not show {string}', async function (this: ICustomWorld, itemText: string) {
-  await pageObject.assertNavigationItemNotVisible(itemText);
+Then('the top header does not show {string}', async function (this: ICustomWorld, item: string) {
+  await pageObject.assertNavItemNotVisible(item);
 });
 
-Then('the CTA button {string} is visible', async function (this: ICustomWorld, buttonText: string) {
-  await pageObject.assertCTAButtonVisible(buttonText);
+Then('the CTA button {string} is visible', async function (this: ICustomWorld, text: string) {
+  await pageObject.assertElementVisible(pageObject.ctaButton(text));
 });
 
-Then('"Home" tab is active/selected', async function (this: ICustomWorld) {
-  await pageObject.assertHomeTabActive();
+Then('{string} tab is active/selected', async function (this: ICustomWorld, tabName: string) {
+  if (tabName === 'Home') {
+    await pageObject.assertHomeTabActive();
+  }
 });
 
-Then('"Home" tab is not active/selected', async function (this: ICustomWorld) {
-  await pageObject.assertHomeTabNotActive();
+Then('{string} tab is not active/selected', async function (this: ICustomWorld, tabName: string) {
+  if (tabName === 'Home') {
+    await pageObject.assertHomeTabNotActive();
+  }
 });
