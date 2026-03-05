@@ -9,19 +9,19 @@ export class TestCsaLaunchpadPage {
   }
 
   /**
-   * Navigate to the specified URL.
+   * Navigate to the specified URL and wait for the page to load.
    * @param url - The URL to navigate to.
    */
-  async navigate(url: string): Promise<void> {
+  async navigateTo(url: string): Promise<void> {
     await this.page.goto(url);
     await this.page.waitForLoadState('networkidle');
   }
 
   /**
-   * Assert the page title matches the expected title.
-   * @param expectedTitle - The expected page title.
+   * Assert that the page title matches the expected value.
+   * @param expectedTitle - The expected title of the page.
    */
   async assertPageTitle(expectedTitle: string): Promise<void> {
-    await expect(this.page).toHaveTitle(expectedTitle);
+    await expect(this.page).toHaveTitle(expectedTitle, { timeout: 5000 });
   }
 }
