@@ -1,18 +1,17 @@
 // Step Definitions for: Test_marketPlace
 import { Given, When, Then } from '@cucumber/cucumber';
-import { expect } from '@playwright/test';
-import { ICustomWorld } from '../../../support/world';
-import { TestMarketplacePage } from './testmarketplace.page';
+import { ICustomWorld } from '../support/world';
+import { MarketplacePage } from '../pages/MarketplacePage';
 
-let pageObject: TestMarketplacePage;
+let pageObject: MarketplacePage;
 
 Given('the marketplace page is loaded', async function (this: ICustomWorld) {
-  pageObject = new TestMarketplacePage(this.page);
-  await pageObject.navigateToMarketplace();
+  pageObject = new MarketplacePage(this.page);
+  await pageObject.navigate();
 });
 
 When('the page renders', async function () {
-  // No specific action required, page load is handled in the background step
+  // No additional actions needed for rendering
 });
 
 Then('the hero section is visible', async function () {
@@ -20,7 +19,7 @@ Then('the hero section is visible', async function () {
 });
 
 When('the hero section is viewed', async function () {
-  // No specific action required, hero section visibility is checked in assertions
+  // No additional actions needed for viewing
 });
 
 Then('the heading text equals {string}', async function (expectedText: string) {
@@ -48,11 +47,11 @@ Then('the section title {string} is visible', async function (expectedText: stri
 });
 
 When('the cards under the {string} section are viewed', async function () {
-  // No specific action required, cards visibility is checked in assertions
+  // No additional actions needed for viewing cards
 });
 
 Then('exactly {int} cards are visible', async function (expectedCount: number) {
-  await pageObject.expectCardsCount(expectedCount);
+  await pageObject.expectNumberOfCards(expectedCount);
 });
 
 Then('the card titles are {string}, {string}, and {string}', async function (title1: string, title2: string, title3: string) {
@@ -60,19 +59,19 @@ Then('the card titles are {string}, {string}, and {string}', async function (tit
 });
 
 When('each displayed card under the {string} section is inspected', async function () {
-  // No specific action required, card elements visibility is checked in assertions
+  // No additional actions needed for inspection
 });
 
 Then('each card shows an image', async function () {
-  await pageObject.expectCardElementsVisible();
+  await pageObject.expectEachCardElements();
 });
 
 Then('each card shows a title', async function () {
-  await pageObject.expectCardElementsVisible();
+  await pageObject.expectEachCardElements();
 });
 
 Then('each card shows supporting descriptive text', async function () {
-  await pageObject.expectCardElementsVisible();
+  await pageObject.expectEachCardElements();
 });
 
 Then('the "Get Started" button is not visible', async function () {
@@ -84,18 +83,18 @@ When('the browser is refreshed', async function () {
 });
 
 When('the page is hard reloaded bypassing cache', async function () {
-  await pageObject.hardReloadPage();
+  await pageObject.hardReload();
 });
 
 When('the browser window is resized between common mobile and desktop widths', async function () {
-  await pageObject.resizeBrowser(375, 667); // Mobile
-  await pageObject.resizeBrowser(1280, 800); // Desktop
+  await pageObject.resizeBrowser(375, 667); // Mobile size
+  await pageObject.resizeBrowser(1280, 720); // Desktop size
 });
 
 Then('the hero section remains visible', async function () {
   await pageObject.expectHeroSectionVisible();
 });
 
-Then('the {string} section remains visible', async function (sectionTitle: string) {
-  await pageObject.expectCardsSectionTitleVisible(sectionTitle);
+Then('the "Automation Tech for Tech" section remains visible', async function () {
+  await pageObject.expectCardsSectionTitleVisible('Automation Tech for Tech');
 });
