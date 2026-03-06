@@ -1,10 +1,10 @@
 import { Page, Locator, expect } from '@playwright/test';
 
 /**
- * Page Object: SetUpUserAuthenticationApiPage
+ * Page Object: GeneratedPage
  * Auto-generated - please customize locators and actions
  */
-export class SetUpUserAuthenticationApiPage {
+export class GeneratedPage {
   readonly page: Page;
 
   constructor(page: Page) {
