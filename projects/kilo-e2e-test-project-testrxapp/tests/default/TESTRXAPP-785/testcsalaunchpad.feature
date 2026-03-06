@@ -1,15 +1,21 @@
-# Test: Test_csa_launchpad
-# Project: proj_4f91ce9f
-# Generated: 2026-03-05T11:39:23.314Z
-# @generated
+/**
+ * Auto-generated Playwright test
+ * Test: Test_csa_launchpad
+ * Project: proj_e8e80b6c
+ * Generated: 2026-03-06T11:32:14.822Z
+ * 
+ * @generated
+ */
+
+import { test, expect } from '@playwright/test';
 
 @automated @regression
 Feature: Test_csa_launchpad
   As a user
-  I want to visit the Playwright website
-  So that I can verify the page loads successfully
+  I want to navigate to the Playwright homepage
+  So that I can verify the presence of the Node.js button
 
-  Scenario: Test_csa_launchpad
-    Given I navigate to the "https://playwright.dev" page
-    When I verify the page title
-    Then the page title should be "Fast and reliable end-to-end testing for modern web apps | Playwright"
+  Scenario: Verify Node.js button on the homepage
+    Given I am on the Playwright homepage
+    When I check for the Node.js button
+    Then I should see the Node.js button displayed

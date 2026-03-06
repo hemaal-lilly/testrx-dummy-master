@@ -1,36 +1,33 @@
-// Page Object: TestCsaLaunchpadPage
-import { Page, expect } from '@playwright/test';
+// Page Object: PlaywrightHomePage
+import { Page, Locator, expect } from '@playwright/test';
 
-export class TestCsaLaunchpadPage {
+export class PlaywrightHomePage {
   readonly page: Page;
 
   constructor(page: Page) {
     this.page = page;
   }
 
+  // Locators (getter-based for lazy evaluation)
+  get nodeJsButton(): Locator {
+    return this.page.locator('a.navbar__link', { hasText: 'Node.js' });
+  }
+
+  // Actions
   /**
-   * Navigate to the specified URL
-   * @param url - The URL to navigate to
+   * Navigate to the Playwright homepage.
+   * @returns {Promise<void>}
    */
-  async navigate(url: string): Promise<void> {
-    await this.page.goto(url);
+  async navigate(): Promise<void> {
+    await this.page.goto('https://playwright.dev/');
     await this.page.waitForLoadState('networkidle');
   }
 
   /**
-   * Get the current page title
-   * @returns The title of the current page
+   * Check if the Node.js button is visible.
+   * @returns {Promise<void>}
    */
-  async getPageTitle(): Promise<string> {
-    return await this.page.title();
-  }
-
-  /**
-   * Assert that the page title matches the expected value
-   * @param expectedTitle - The expected page title
-   */
-  async assertPageTitle(expectedTitle: string): Promise<void> {
-    const actualTitle = await this.getPageTitle();
-    await expect(actualTitle).toBe(expectedTitle);
+  async verifyNodeJsButton(): Promise<void> {
+    await expect(this.nodeJsButton).toBeVisible({ timeout: 5000 });
   }
 }
