@@ -1,10 +1,10 @@
-// Page Object: ImplementExceptionHandlingAndMonitoringNotificationsPage
+// Page Object: ExceptionHandlingAndMonitoringNotificationsPage
 import { Page, Locator, expect } from '@playwright/test';
 
 /**
- * Page Object for Implementing Exception Handling and Monitoring Notifications
+ * Page Object for Exception Handling and Monitoring Notifications
  */
-export class ImplementExceptionHandlingAndMonitoringNotificationsPage {
+export class ExceptionHandlingAndMonitoringNotificationsPage {
   readonly page: Page;
 
   constructor(page: Page) {
@@ -12,33 +12,15 @@ export class ImplementExceptionHandlingAndMonitoringNotificationsPage {
   }
 
   // Locators (getter-based for lazy evaluation)
-  get monitoringDistributionInput(): Locator {
-    return this.page.locator('[data-testid="monitoring-distribution"]');
-  }
-
-  get stakeholderRecipientsInput(): Locator {
-    return this.page.locator('[data-testid="stakeholder-recipients"]');
-  }
-
-  get logPathInput(): Locator {
-    return this.page.locator('[data-testid="log-path"]');
-  }
-
-  get retryAttemptsInput(): Locator {
-    return this.page.locator('[data-testid="retry-attempts"]');
-  }
-
-  get errorNotification(): Locator {
-    return this.page.locator('[data-testid="error-notification"]');
-  }
-
-  get exceptionLogEntry(): Locator {
-    return this.page.locator('[data-testid="exception-log-entry"]');
-  }
-
-  get stopNotification(): Locator {
-    return this.page.locator('[data-testid="stop-notification"]');
-  }
+  get monitoringDistributionInput() { return this.page.locator('[data-testid="monitoring-distribution"]'); }
+  get stakeholderRecipientsInput() { return this.page.locator('[data-testid="stakeholder-recipients"]'); }
+  get logPathInput() { return this.page.locator('[data-testid="log-path"]'); }
+  get retryAttemptsInput() { return this.page.locator('[data-testid="retry-attempts"]'); }
+  get moleculeIdInput() { return this.page.locator('[data-testid="molecule-id"]'); }
+  get projectInput() { return this.page.locator('[data-testid="project"]'); }
+  get errorNotification() { return this.page.locator('[data-testid="error-notification"]'); }
+  get stopNotification() { return this.page.locator('[data-testid="stop-notification"]'); }
+  get logEntry() { return this.page.locator('[data-testid="log-entry"]'); }
 
   // Actions
   async configureMonitoringDistribution(email: string): Promise<void> {
@@ -57,28 +39,20 @@ export class ImplementExceptionHandlingAndMonitoringNotificationsPage {
     await this.retryAttemptsInput.fill(attempts.toString());
   }
 
-  async captureException(stepName: string): Promise<void> {
-    await this.page.locator(`[data-testid="capture-exception-${stepName}"]`).click();
+  async configureMolecule(moleculeId: string, project: string): Promise<void> {
+    await this.moleculeIdInput.fill(moleculeId);
+    await this.projectInput.fill(project);
   }
 
-  async triggerRetryPolicy(): Promise<void> {
-    await this.page.locator('[data-testid="retry-policy-trigger"]').click();
-  }
-
-  async stopProcessing(): Promise<void> {
-    await this.page.locator('[data-testid="stop-processing"]').click();
-  }
-
-  // Assertions
   async expectErrorNotification(): Promise<void> {
     await expect(this.errorNotification).toBeVisible({ timeout: 10000 });
   }
 
-  async expectExceptionLogEntry(): Promise<void> {
-    await expect(this.exceptionLogEntry).toBeVisible({ timeout: 10000 });
-  }
-
   async expectStopNotification(): Promise<void> {
     await expect(this.stopNotification).toBeVisible({ timeout: 10000 });
+  }
+
+  async expectLogEntry(): Promise<void> {
+    await expect(this.logEntry).toBeVisible({ timeout: 10000 });
   }
 }
