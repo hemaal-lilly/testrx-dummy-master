@@ -1,7 +1,13 @@
-# Test: Test_marketPlace
-# Project: proj_4f91ce9f
-# Generated: 2026-03-05T11:38:28.685Z
-# @generated
+/**
+ * Auto-generated Playwright test
+ * Test: Test_marketPlace
+ * Project: proj_e8e80b6c
+ * Generated: 2026-03-06T11:32:00.016Z
+ * 
+ * @generated
+ */
+
+import { test, expect } from '@playwright/test';
 
 Feature: Marketplace landing page hero and cards display
   In order to quickly understand the automation offerings
