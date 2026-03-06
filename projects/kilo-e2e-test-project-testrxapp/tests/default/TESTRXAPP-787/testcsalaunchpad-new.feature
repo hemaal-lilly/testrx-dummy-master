@@ -1,7 +1,13 @@
-# Test: Test_csa_launchpad-New
-# Project: proj_4f91ce9f
-# Generated: 2026-03-05T11:38:50.739Z
-# @generated
+/**
+ * Auto-generated Playwright test
+ * Test: Test_csa_launchpad-New
+ * Project: proj_e8e80b6c
+ * Generated: 2026-03-06T11:32:22.871Z
+ * 
+ * @generated
+ */
+
+import { test, expect } from '@playwright/test';
 
 Feature: CSA Launchpad Home Page navigation and cards
   In order to navigate CSA Launchpad and access key tools

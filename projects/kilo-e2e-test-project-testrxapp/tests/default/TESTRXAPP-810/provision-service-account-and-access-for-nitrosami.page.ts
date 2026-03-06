@@ -1,10 +1,7 @@
-// Page Object: ProvisionServiceAccountAndAccessForNitrosamineAutomationPage
+// Page Object: ProvisionServiceAccountPage
 import { Page, Locator, expect } from '@playwright/test';
 
-/**
- * Page Object for provisioning the Nitrosamine service account and validating its access.
- */
-export class ProvisionServiceAccountAndAccessForNitrosamineAutomationPage {
+export class ProvisionServiceAccountPage {
   readonly page: Page;
 
   constructor(page: Page) {
@@ -16,53 +13,46 @@ export class ProvisionServiceAccountAndAccessForNitrosamineAutomationPage {
   get subjectInput() { return this.page.locator('[data-testid="subject-input"]'); }
   get bodyInput() { return this.page.locator('[data-testid="body-input"]'); }
   get sendButton() { return this.page.locator('[data-testid="send-button"]'); }
+  get inboxRefreshButton() { return this.page.locator('[data-testid="refresh-inbox"]'); }
   get provisioningForm() { return this.page.locator('[data-testid="provisioning-form"]'); }
   get submitButton() { return this.page.locator('[data-testid="submit-button"]'); }
-  get jobStatus() { return this.page.locator('[data-testid="job-status"]'); }
 
   // Actions
-  async navigateToEmailClient(): Promise<void> {
-    await this.page.goto('/email-client');
+  async signIn(email: string): Promise<void> {
+    await this.page.goto('/login');
+    await this.page.fill('[data-testid="username"]', email);
+    await this.page.fill('[data-testid="password"]', 'password'); // Replace with secure handling
+    await this.page.click('[data-testid="login-button"]');
     await this.page.waitForLoadState('networkidle');
   }
 
-  async composeAndSendEmail(email: string, subject: string, body: string): Promise<void> {
-    await this.emailInput.fill(email);
+  async composeEmail(to: string, subject: string, body: string): Promise<void> {
+    await this.emailInput.fill(to);
     await this.subjectInput.fill(subject);
     await this.bodyInput.fill(body);
     await this.sendButton.click();
     await this.page.waitForLoadState('networkidle');
   }
 
-  async navigateToProvisioningPage(): Promise<void> {
-    await this.page.goto('/provisioning');
+  async refreshInbox(): Promise<void> {
+    await this.inboxRefreshButton.click();
     await this.page.waitForLoadState('networkidle');
   }
 
-  async submitProvisioningForm(data: { accountName?: string; unixGroups: string[]; lrlhpsPath: string; guavaPath: string; monitoringDistribution?: string[] }): Promise<void> {
-    if (data.accountName) {
-      await this.page.locator('[data-testid="account-name"]').fill(data.accountName);
-    }
-    await this.page.locator('[data-testid="unix-groups"]').fill(data.unixGroups.join(','));
-    await this.page.locator('[data-testid="lrlhps-path"]').fill(data.lrlhpsPath);
-    await this.page.locator('[data-testid="guava-path"]').fill(data.guavaPath);
-    if (data.monitoringDistribution) {
-      await this.page.locator('[data-testid="monitoring-distribution"]').fill(data.monitoringDistribution.join(','));
-    }
+  async submitProvisioningRequest(data: { accountName: string; unixGroups: string[]; lrlhpsPath: string; guavaPath: string; monitoringDistribution: string[] }): Promise<void> {
+    await this.provisioningForm.fill(JSON.stringify(data));
     await this.submitButton.click();
     await this.page.waitForLoadState('networkidle');
   }
 
-  async monitorJobStatus(): Promise<void> {
-    await expect(this.jobStatus).toHaveText(/completed/);
-  }
-
   // Assertions
-  async expectEmailSent(): Promise<void> {
-    await expect(this.page.locator('[data-testid="email-sent-confirmation"]')).toBeVisible();
+  async expectEmailReceived(): Promise<void> {
+    const emailLocator = this.page.locator('[data-testid="email-item"]');
+    await expect(emailLocator).toBeVisible();
   }
 
   async expectProvisioningSuccess(): Promise<void> {
-    await expect(this.page.locator('[data-testid="provisioning-success"]')).toBeVisible();
+    const successMessage = this.page.locator('[data-testid="success-message"]');
+    await expect(successMessage).toBeVisible();
   }
 }
