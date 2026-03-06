@@ -1,7 +1,10 @@
-// Page Object: TestMarketplaceRajeevPage
+// Page Object: MarketplacePage
 import { Page, Locator, expect } from '@playwright/test';
 
-export class TestMarketplaceRajeevPage {
+/**
+ * Page Object for the Marketplace login and home page.
+ */
+export class MarketplacePage {
   readonly page: Page;
 
   constructor(page: Page) {
@@ -30,8 +33,8 @@ export class TestMarketplaceRajeevPage {
   }
 
   // Actions
-  async navigateToPage(url: string): Promise<void> {
-    await this.page.goto(url);
+  async navigateToLoginPage(): Promise<void> {
+    await this.page.goto('https://qa.automate.lilly.com');
     await this.page.waitForLoadState('networkidle');
   }
 
@@ -43,13 +46,13 @@ export class TestMarketplaceRajeevPage {
     await this.passwordInput.fill(password);
   }
 
-  async clickLogin(): Promise<void> {
+  async clickLoginButton(): Promise<void> {
     await this.loginButton.click();
     await this.page.waitForLoadState('networkidle');
   }
 
   // Assertions
-  async expectHeaderNavigationBarVisible(): Promise<void> {
+  async expectHeaderNavigationVisible(): Promise<void> {
     await expect(this.headerNavigationBar).toBeVisible();
   }
 
@@ -57,7 +60,7 @@ export class TestMarketplaceRajeevPage {
     await expect(this.errorMessage).toBeVisible();
   }
 
-  async expectPageHeaderVisible(): Promise<void> {
+  async expectHeaderWithoutLogin(): Promise<void> {
     await expect(this.headerNavigationBar).toBeVisible();
   }
 }
