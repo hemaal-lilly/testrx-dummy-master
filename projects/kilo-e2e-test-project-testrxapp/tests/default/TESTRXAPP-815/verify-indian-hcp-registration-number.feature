@@ -1,7 +1,13 @@
-# Test: Verify Indian HCP Registration Number
-# Project: proj_4f91ce9f
-# Generated: 2026-03-05T11:38:02.181Z
-# @generated
+/**
+ * Auto-generated Playwright test
+ * Test: Verify Indian HCP Registration Number
+ * Project: proj_e8e80b6c
+ * Generated: 2026-03-06T11:31:44.585Z
+ * 
+ * @generated
+ */
+
+import { test, expect } from '@playwright/test';
 
 Feature: Verify Indian HCP Medical Registration Number
   In order to access HCP-only features and content
