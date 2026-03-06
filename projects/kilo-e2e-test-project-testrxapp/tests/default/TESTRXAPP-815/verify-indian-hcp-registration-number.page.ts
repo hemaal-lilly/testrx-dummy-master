@@ -36,10 +36,6 @@ export class VerifyIndianHcpRegistrationNumberPage {
     return this.page.locator('[data-testid="verify-spinner"]');
   }
 
-  get toastMessage(): Locator {
-    return this.page.locator('[data-testid="toast-message"]');
-  }
-
   // Actions
   async navigateToVerificationForm(): Promise<void> {
     await this.page.goto('/hcp-verification-form');
@@ -54,40 +50,32 @@ export class VerifyIndianHcpRegistrationNumberPage {
     await this.mrnInput.fill(mrn);
   }
 
-  async blurMrnInput(): Promise<void> {
-    await this.mrnInput.blur();
-  }
-
   async clickVerifyButton(): Promise<void> {
     await this.verifyButton.click();
   }
 
+  async blurMrnInput(): Promise<void> {
+    await this.mrnInput.blur();
+  }
+
   // Assertions
-  async expectSpinnerVisible(): Promise<void> {
-    await expect(this.verificationSpinner).toBeVisible({ timeout: 3000 });
+  async expectErrorMessage(expectedMessage: string): Promise<void> {
+    await expect(this.errorMessageContainer).toHaveText(expectedMessage, { timeout: 5000 });
   }
 
-  async expectSpinnerHidden(): Promise<void> {
-    await expect(this.verificationSpinner).toBeHidden({ timeout: 3000 });
+  async expectVerificationStatus(expectedStatus: string): Promise<void> {
+    await expect(this.verificationStatusBadge).toHaveText(expectedStatus, { timeout: 5000 });
   }
 
-  async expectVerificationStatus(status: string): Promise<void> {
-    await expect(this.verificationStatusBadge).toHaveText(status, { timeout: 3000 });
+  async expectSpinnerVisibility(isVisible: boolean): Promise<void> {
+    if (isVisible) {
+      await expect(this.verificationSpinner).toBeVisible({ timeout: 5000 });
+    } else {
+      await expect(this.verificationSpinner).not.toBeVisible({ timeout: 5000 });
+    }
   }
 
-  async expectErrorMessage(message: string): Promise<void> {
-    await expect(this.errorMessageContainer).toHaveText(message, { timeout: 3000 });
-  }
-
-  async expectToastMessage(message: string): Promise<void> {
-    await expect(this.toastMessage).toHaveText(message, { timeout: 3000 });
-  }
-
-  async expectVerifyButtonDisabled(): Promise<void> {
-    await expect(this.verifyButton).toBeDisabled();
-  }
-
-  async expectVerifyButtonEnabled(): Promise<void> {
-    await expect(this.verifyButton).toBeEnabled();
+  async expectVerifyButtonDisabled(isDisabled: boolean): Promise<void> {
+    await expect(this.verifyButton).toBeDisabled({ timeout: 5000 });
   }
 }

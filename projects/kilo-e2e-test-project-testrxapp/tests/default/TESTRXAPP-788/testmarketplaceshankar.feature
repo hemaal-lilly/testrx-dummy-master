@@ -1,7 +1,13 @@
-# Test: Test_MarketPlace_Shankar
-# Project: proj_4f91ce9f
-# Generated: 2026-03-05T11:38:57.152Z
-# @generated
+/**
+ * Auto-generated Playwright test
+ * Test: Test_MarketPlace_Shankar
+ * Project: proj_e8e80b6c
+ * Generated: 2026-03-06T11:31:02.253Z
+ * 
+ * @generated
+ */
+
+import { test, expect } from '@playwright/test';
 
 Feature: Enterprise Automation homepage UI visibility and state
   In order to verify the homepage renders key user-visible elements
