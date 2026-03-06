@@ -1,40 +1,49 @@
-# Test: Set Up User Authentication API
-# Project: proj_4f91ce9f
-# Generated: 2026-03-05T11:38:15.837Z
-# @generated
+/**
+ * Auto-generated Playwright test
+ * Test: Set Up User Authentication API
+ * Project: proj_e8e80b6c
+ * Generated: 2026-03-06T11:37:07.599Z
+ * 
+ * @generated
+ */
 
-@automated @api @authentication
+import { test, expect } from '@playwright/test';
+
+@api @authentication
 Feature: Set Up User Authentication API
   As a developer
-  I want to test the user authentication API endpoints
-  So that I can verify their functionality and security
+  I want to test the user authentication API
+  So that I can ensure it behaves as expected
 
   Scenario: Register a new user successfully
     Given I send a POST request to "/api/auth/register" with JSON body:
-      | name  | email                     | password       |
-      | Alice | alice.unique@example.com  | P@ssw0rd123   |
-    Then I should see a successful response with status code 201
-
-  Scenario: Attempt to register with an existing email
-    Given I send a POST request to "/api/auth/register" with JSON body:
-      | name  | email                     | password       |
-      | Ellen | ellen.dup@example.com     | P@ssw0rd123   |
-    Then I should see an error response with status code 409
+      | name           | email                       | password       |
+      | Alice Example  | alice.unique@example.com   | P@ssw0rd123    |
+    Then I should receive a 201 status code
+    And the response should contain the user ID and email
 
   Scenario: Login with valid credentials
     Given I send a POST request to "/api/auth/login" with JSON body:
       | email                  | password       |
       | carol.login@example.com | ValidPass!234 |
-    Then I should see a successful response with status code 200
+    Then I should receive a 200 status code
+    And the response should contain a valid JWT token
 
-  Scenario: Access secured endpoint with valid JWT
-    Given I send a GET request to "/api/secured-endpoint" with Authorization header containing a valid JWT
-    Then I should see a successful response with status code 200
+  Scenario: Access secured endpoint with valid token
+    Given I send a GET request to "/api/secure-endpoint" with Authorization header set to a valid JWT
+    Then I should receive a 200 status code
+    And the response should contain the secured data
 
-  Scenario: Access secured endpoint without Authorization header
-    Given I send a GET request to "/api/secured-endpoint" without Authorization header
-    Then I should see an error response with status code 401
+  Scenario: Login with incorrect password
+    Given I send a POST request to "/api/auth/login" with JSON body:
+      | email               | password       |
+      | dave.user@example.com | WrongPassword |
+    Then I should receive a 401 status code
+    And the response should contain an error message
 
-  Scenario: Access secured endpoint with invalid JWT
-    Given I send a GET request to "/api/secured-endpoint" with Authorization header containing an invalid JWT
-    Then I should see an error response with status code 403
+  Scenario: Register with duplicate email
+    Given I send a POST request to "/api/auth/register" with JSON body:
+      | name          | email                  | password       |
+      | Ellen Dup     | ellen.dup@example.com | AnyPassword123 |
+    Then I should receive a 409 status code
+    And the response should contain an error message

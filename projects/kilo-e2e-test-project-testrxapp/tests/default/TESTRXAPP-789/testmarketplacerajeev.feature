@@ -1,29 +1,39 @@
-# Test: Test_MarketPlace_rajeev
-# Project: proj_4f91ce9f
-# Generated: 2026-03-05T11:38:40.980Z
-# @generated
+/**
+ * Auto-generated Playwright test
+ * Test: Test_MarketPlace_rajeev
+ * Project: proj_e8e80b6c
+ * Generated: 2026-03-06T11:37:04.513Z
+ * 
+ * @generated
+ */
+
+import { test, expect } from '@playwright/test';
 
 @automated @regression
 Feature: Test_MarketPlace_rajeev
   As a user
   I want to log in to the marketplace
-  So that I can access the home page and validate login scenarios
+  So that I can access the home page and verify functionality
 
   Scenario: Successful login with valid credentials
-    Given I navigate to the page {string}
-    When I enter valid credentials
-    Then I should see the top header navigation bar
+    Given I navigate to the login page
+    When I enter valid username and password
+    And I click the Login button
+    Then I should see the top header navigation bar on the home page
 
-  Scenario: Login with one missing credential field
-    Given I navigate to the page {string}
-    When I leave the username field empty and enter a valid password
-    Then I should see an error message indicating missing credentials
+  Scenario: Login attempt with missing credentials
+    Given I navigate to the login page
+    When I leave the username field empty
+    And I enter a valid password
+    And I click the Login button
+    Then I should see an error message for missing credentials
 
-  Scenario: Login with invalid credentials
-    Given I navigate to the page {string}
-    When I enter invalid username or password
-    Then I should see an error message indicating invalid credentials
+  Scenario: Login attempt with invalid credentials
+    Given I navigate to the login page
+    When I enter an invalid username or password
+    And I click the Login button
+    Then I should see an error message for invalid credentials
 
-  Scenario: Observe the page header without logging in
-    Given I navigate to the page {string}
-    Then I should see the page header and navigation options
+  Scenario: Observe page header without logging in
+    Given I navigate to the login page
+    Then I should see the page header/navigation without logging in

@@ -214,30 +214,4 @@ export function logStep(step: string, context?: Record<string, unknown>): void {
   console.log(`[${timestamp}] STEP: ${step}`, context ? JSON.stringify(context) : '');
 }
 
-// ==================== Credential Helpers ====================
-
-/**
- * Get a credential value from environment variables.
- * Credentials are injected by the TestRx Executor at runtime.
- *
- * Usage:
- *   const username = getCredential('LOGIN_USERNAME');
- *   const token = getCredential('API_TOKEN', false); // optional
- *
- * @param key - Credential key (e.g. 'LOGIN_USERNAME')
- * @param required - If true (default), throws when the credential is missing
- * @returns The credential value
- */
-export function getCredential(key: string, required = true): string {
-  const envKey = key.startsWith('TESTRX_CRED_') ? key : `TESTRX_CRED_${key}`;
-  const value = process.env[envKey];
-  if (!value && required) {
-    throw new Error(
-      `Missing required credential: ${key}. ` +
-      `Provide it via the TestRx Executor or set env var ${envKey}.`
-    );
-  }
-  return value || '';
-}
-
 // ==================== End of Utilities ====================

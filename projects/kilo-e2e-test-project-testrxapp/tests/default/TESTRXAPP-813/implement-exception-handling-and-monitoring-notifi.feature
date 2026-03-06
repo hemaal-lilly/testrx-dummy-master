@@ -1,7 +1,13 @@
-# Test: Implement exception handling and monitoring notifications
-# Project: proj_4f91ce9f
-# Generated: 2026-03-05T11:37:53.107Z
-# @generated
+/**
+ * Auto-generated Playwright test
+ * Test: Implement exception handling and monitoring notifications
+ * Project: proj_e8e80b6c
+ * Generated: 2026-03-06T11:36:57.999Z
+ * 
+ * @generated
+ */
+
+import { test, expect } from '@playwright/test';
 
 Feature: TESTRXAPP-808 Exception handling and monitoring notifications
   In order to ensure failures are detected, communicated, and remediated promptly across the automation

@@ -1,28 +1,27 @@
-// Step Definitions for: Enterprise Automation homepage UI visibility and state
+// Step Definitions for: Test_MarketPlace_Shankar
 import { Given, When, Then } from '@cucumber/cucumber';
-import { expect } from '@playwright/test';
-import { ICustomWorld } from '../../../support/world';
-import { TestMarketplaceShankarPage } from './testmarketplaceshankar.page';
+import { ICustomWorld } from '../support/world';
+import { EnterpriseAutomationHomePage } from '../pages/EnterpriseAutomationHomePage';
 
-let pageObject: TestMarketplaceShankarPage;
+let pageObject: EnterpriseAutomationHomePage;
 
-Given('I open {string}', async function (this: ICustomWorld, url: string) {
-  pageObject = new TestMarketplaceShankarPage(this.page);
-  await pageObject.navigate(url);
+Given('I open https://qa.automate.lilly.com', async function (this: ICustomWorld) {
+  pageObject = new EnterpriseAutomationHomePage(this.page);
+  await pageObject.navigate();
 });
 
 Given('I am on the page', async function (this: ICustomWorld) {
-  pageObject = new TestMarketplaceShankarPage(this.page);
-  await pageObject.navigate('https://qa.automate.lilly.com');
+  pageObject = new EnterpriseAutomationHomePage(this.page);
+  await pageObject.navigate();
 });
 
 Given('I am on the home page', async function (this: ICustomWorld) {
-  pageObject = new TestMarketplaceShankarPage(this.page);
-  await pageObject.navigate('https://qa.automate.lilly.com');
+  pageObject = new EnterpriseAutomationHomePage(this.page);
+  await pageObject.navigate();
 });
 
 When('the page loads', async function () {
-  await this.page.waitForLoadState('networkidle');
+  // No specific actions needed as the page load is handled in navigation
 });
 
 Then('the Lilly logo is visible', async function () {
@@ -33,42 +32,38 @@ Then('the Lilly logo is not visible', async function () {
   await pageObject.assertLillyLogoNotVisible();
 });
 
-Then('the header title {string} is visible', async function (expectedTitle: string) {
-  await pageObject.assertHeaderTitle(expectedTitle);
+Then('the header title "Enterprise Automation" is visible', async function () {
+  await pageObject.assertHeaderTitleVisible();
 });
 
 Then('the header section is visible', async function () {
-  await expect(pageObject.headerSection).toBeVisible({ timeout: 5000 });
+  await pageObject.assertSectionVisible(pageObject.headerSection);
 });
 
 Then('the hero banner is visible', async function () {
-  await expect(pageObject.heroBanner).toBeVisible({ timeout: 5000 });
+  await pageObject.assertSectionVisible(pageObject.heroBanner);
 });
 
 Then('the cards section is visible', async function () {
-  await expect(pageObject.cardsSection).toBeVisible({ timeout: 5000 });
+  await pageObject.assertSectionVisible(pageObject.cardsSection);
 });
 
 Then('the top header shows {string}', async function (itemText: string) {
-  await pageObject.assertNavigationItemVisible(itemText);
+  await pageObject.assertNavItemVisible(itemText);
 });
 
 Then('the top header does not show {string}', async function (itemText: string) {
-  await pageObject.assertNavigationItemNotVisible(itemText);
+  await pageObject.assertNavItemNotVisible(itemText);
 });
 
 Then('the CTA button {string} is visible', async function (buttonText: string) {
   await pageObject.assertCTAButtonVisible(buttonText);
 });
 
-Then('{string} tab is active/selected', async function (tabName: string) {
-  if (tabName === 'Home') {
-    await pageObject.assertHomeTabActive();
-  }
+Then('"Home" tab is active/selected', async function () {
+  await pageObject.assertHomeTabActive();
 });
 
-Then('{string} tab is not active/selected', async function (tabName: string) {
-  if (tabName === 'Home') {
-    await pageObject.assertHomeTabNotActive();
-  }
+Then('"Home" tab is not active/selected', async function () {
+  await pageObject.assertHomeTabNotActive();
 });

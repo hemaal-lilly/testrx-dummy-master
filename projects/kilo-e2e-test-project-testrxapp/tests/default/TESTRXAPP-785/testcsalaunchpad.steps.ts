@@ -1,20 +1,19 @@
 // Step Definitions
 import { Given, When, Then } from '@cucumber/cucumber';
-import { expect } from '@playwright/test';
-import { ICustomWorld } from '../../../support/world';
-import { TestCsaLaunchpadPage } from './testcsalaunchpad.page';
+import { PlaywrightHomePage } from '../pages/PlaywrightHomePage';
+import { ICustomWorld } from '../support/world';
 
-let pageObject: TestCsaLaunchpadPage;
+let pageObject: PlaywrightHomePage;
 
-Given('I navigate to the {string} page', async function (this: ICustomWorld, url: string) {
-  pageObject = new TestCsaLaunchpadPage(this.page);
-  await pageObject.navigate(url);
+Given('I am on the Playwright homepage', async function (this: ICustomWorld) {
+  pageObject = new PlaywrightHomePage(this.page);
+  await pageObject.navigate();
 });
 
-When('I verify the page title', async function (this: ICustomWorld) {
-  // No action needed here as the title will be asserted in the next step
+When('I check for the Node.js button', async function (this: ICustomWorld) {
+  // No action needed; verification happens in the Then step
 });
 
-Then('the page title should be {string}', async function (this: ICustomWorld, expectedTitle: string) {
-  await pageObject.assertPageTitle(expectedTitle);
+Then('I should see the Node.js button displayed', async function (this: ICustomWorld) {
+  await pageObject.verifyNodeJsButton();
 });
