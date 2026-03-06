@@ -1,49 +1,51 @@
 // Step Definitions
 import { Given, When, Then } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
-import { ICustomWorld } from '../../../support/world';
-import { TestMarketplaceRajeevPage } from './testmarketplacerajeev.page';
-import { getCredential } from '../../../utils/common';
+import { ICustomWorld } from '../support/world';
+import { MarketplacePage } from '../pages/MarketplacePage';
 
-let pageObject: TestMarketplaceRajeevPage;
+let marketplacePage: MarketplacePage;
 
-Given('I navigate to the page {string}', async function (this: ICustomWorld, url: string) {
-  pageObject = new TestMarketplaceRajeevPage(this.page);
-  await pageObject.navigateToPage(url);
+Given('I navigate to the login page', async function (this: ICustomWorld) {
+  marketplacePage = new MarketplacePage(this.page);
+  await marketplacePage.navigateToLoginPage();
 });
 
-When('I enter valid credentials', async function (this: ICustomWorld) {
-  const username = getCredential('LOGIN_USERNAME');
-  const password = getCredential('LOGIN_PASSWORD');
-  await pageObject.enterUsername(username);
-  await pageObject.enterPassword(password);
-  await pageObject.clickLogin();
+When('I enter valid username and password', async function (this: ICustomWorld) {
+  const username = 'validUsername'; // Replace with data from Excel sheet
+  const password = 'validPassword'; // Replace with data from Excel sheet
+  await marketplacePage.enterUsername(username);
+  await marketplacePage.enterPassword(password);
 });
 
-Then('I should see the top header navigation bar', async function (this: ICustomWorld) {
-  await pageObject.expectHeaderNavigationBarVisible();
+When('I leave the username field empty', async function (this: ICustomWorld) {
+  const password = 'validPassword'; // Replace with data from Excel sheet
+  await marketplacePage.enterPassword(password);
 });
 
-When('I leave the username field empty and enter a valid password', async function (this: ICustomWorld) {
-  const password = getCredential('LOGIN_PASSWORD');
-  await pageObject.enterPassword(password);
-  await pageObject.clickLogin();
+When('I enter an invalid username or password', async function (this: ICustomWorld) {
+  const invalidUsername = 'invalidUsername';
+  const invalidPassword = 'invalidPassword';
+  await marketplacePage.enterUsername(invalidUsername);
+  await marketplacePage.enterPassword(invalidPassword);
 });
 
-Then('I should see an error message indicating missing credentials', async function (this: ICustomWorld) {
-  await pageObject.expectErrorMessageVisible();
+When('I click the Login button', async function (this: ICustomWorld) {
+  await marketplacePage.clickLoginButton();
 });
 
-When('I enter invalid username or password', async function (this: ICustomWorld) {
-  await pageObject.enterUsername('invalid_user');
-  await pageObject.enterPassword('invalid_pass');
-  await pageObject.clickLogin();
+Then('I should see the top header navigation bar on the home page', async function (this: ICustomWorld) {
+  await marketplacePage.expectHeaderNavigationVisible();
 });
 
-Then('I should see an error message indicating invalid credentials', async function (this: ICustomWorld) {
-  await pageObject.expectErrorMessageVisible();
+Then('I should see an error message for missing credentials', async function (this: ICustomWorld) {
+  await marketplacePage.expectErrorMessageVisible();
 });
 
-Then('I should see the page header and navigation options', async function (this: ICustomWorld) {
-  await pageObject.expectPageHeaderVisible();
+Then('I should see an error message for invalid credentials', async function (this: ICustomWorld) {
+  await marketplacePage.expectErrorMessageVisible();
+});
+
+Then('I should see the page header/navigation without logging in', async function (this: ICustomWorld) {
+  await marketplacePage.expectHeaderWithoutLogin();
 });
