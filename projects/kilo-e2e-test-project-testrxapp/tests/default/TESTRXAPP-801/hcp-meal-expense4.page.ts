@@ -10,19 +10,34 @@ export class HcpMealExpense4Page {
 
   // Locators
   get productList() { return this.page.locator('[data-testid="product-list"]'); }
-  get addProductButton() { return this.page.locator('[data-testid="add-product"]'); }
-  get processButton() { return this.page.locator('[data-testid="process"]'); }
+  get processButton() { return this.page.locator('[data-testid="process-button"]'); }
+  get addProductButton() { return this.page.locator('[data-testid="add-product-button"]'); }
   get warningMessage() { return this.page.locator('[data-testid="warning-message"]'); }
 
   // Actions
-  async navigate(): Promise<void> {
-    await this.page.goto('/odm');
+  async navigateToPage(): Promise<void> {
+    await this.page.goto('/product-list');
     await this.page.waitForLoadState('networkidle');
   }
 
-  async getProductCount(): Promise<number> {
-    const countText = await this.productList.textContent();
-    return parseInt(countText || '0', 10);
+  async confirmProductListEmpty(): Promise<void> {
+    const productCount = await this.productList.count();
+    expect(productCount).toBe(0);
+  }
+
+  async confirmProductListNotEmpty(): Promise<void> {
+    const productCount = await this.productList.count();
+    expect(productCount).toBeGreaterThan(0);
+  }
+
+  async confirmProductListCount(expectedCount: number): Promise<void> {
+    const productCount = await this.productList.count();
+    expect(productCount).toBe(expectedCount);
+  }
+
+  async initiateProcessing(): Promise<void> {
+    await this.processButton.click();
+    await this.page.waitForLoadState('networkidle');
   }
 
   async addProduct(): Promise<void> {
@@ -30,23 +45,13 @@ export class HcpMealExpense4Page {
     await this.page.waitForLoadState('networkidle');
   }
 
-  async processProductList(): Promise<void> {
-    await this.processButton.click();
-    await this.page.waitForLoadState('networkidle');
-  }
-
-  async getWarningMessageText(): Promise<string> {
+  async captureWarningMessage(): Promise<string> {
     return await this.warningMessage.textContent();
   }
 
   // Assertions
-  async expectProductCount(expectedCount: number): Promise<void> {
-    const actualCount = await this.getProductCount();
-    await expect(actualCount).toBe(expectedCount);
-  }
-
   async expectWarningMessage(expectedMessage: string): Promise<void> {
-    const actualMessage = await this.getWarningMessageText();
-    await expect(actualMessage).toContain(expectedMessage);
+    const actualMessage = await this.captureWarningMessage();
+    expect(actualMessage).toBe(expectedMessage);
   }
 }
